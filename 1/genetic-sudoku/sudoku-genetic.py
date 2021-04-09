@@ -14,7 +14,7 @@ random_generator = np.random.default_rng()
 
 @dataclass
 class Grid:
-    def __init__(self, grid, initial=None):
+    def __init__(self, grid: list[list[int]], initial=None):
         self.current = grid
         # TODO: shared initial, N, max_score
         if initial is None:
@@ -37,7 +37,23 @@ def main(args):
         selected = random.choices(
             population=candidates, weights=fitness_weights, k=POPULATION_SIZE
         )
+        children = crossover(selected)
         fitness_weights = [fitness(grid) for grid in candidates]
+
+
+def crossover(grids: list[Grid], children: list[Grid] = []) -> list[Grid]:
+    if grids == []:
+        return children
+    else:
+        N = grids[0].N
+        point = random_generator.integers(N - 1)
+        child0 = Grid(
+            grids[0].current[0:point] + grids[1].current[point:N], grids[0].initial
+        )
+        child1 = Grid(
+            grids[1].current[0:point] + grids[0].current[point:N], grids[1].initial
+        )
+        return crossover(grids[2:], children + [child0, child1])
 
 
 def print_grid(grid: Grid):
