@@ -105,6 +105,7 @@ def dfs(initNode):
             if child.stringState not in visitedStateSet:
                 stack.append(child)
 
+    return None
 
 def findChildNodes(node):
     childList = []
@@ -168,11 +169,14 @@ def swap(state, index0, destIndex):
 
 # Print the solution step by step from the final state down to init state
 def showSolution(finalnode):
-    curNode = finalnode
-    while curNode:
-        curNode.showState()
-        curNode = curNode.parent
+    if finalnode:
+        curNode = finalnode
+        while curNode:
+            curNode.showState()
+            curNode = curNode.parent
 
+    else:
+        print("No solution")
 
 def main():
     parser = argparse.ArgumentParser()
