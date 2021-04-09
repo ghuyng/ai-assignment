@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import random
 
 # TODO: make it configurable
-POPULATION_SIZE = 8
+POPULATION_SIZE = 1024
 
 random_generator = np.random.default_rng()
 
@@ -15,7 +15,7 @@ random_generator = np.random.default_rng()
 @dataclass
 class Grid:
     def __init__(self, grid: list[list[int]], initial=None):
-        self.current = grid
+        self.current = np.copy(grid)
         # TODO: shared initial, N, max_score
         if initial is None:
             self.initial = np.copy(grid)
@@ -57,10 +57,12 @@ def crossover(grids: list[Grid], children: list[Grid] = []) -> list[Grid]:
         N = grids[0].N
         point = random_generator.integers(N - 1)
         child0 = Grid(
-            grids[0].current[0:point] + grids[1].current[point:N], grids[0].initial
+            np.concatenate((grids[0].current[0:point], grids[1].current[point:N])),
+            grids[0].initial,
         )
         child1 = Grid(
-            grids[1].current[0:point] + grids[0].current[point:N], grids[1].initial
+            np.concatenate((grids[1].current[0:point], grids[0].current[point:N])),
+            grids[1].initial,
         )
         return crossover(grids[2:], children + [child0, child1])
 
