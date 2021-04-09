@@ -21,7 +21,7 @@ DOWN = 2
 LEFT = 3
 RIGHT = 4
 
-goalState = []
+goalStringState = ""
 N = 0
 
 # Class node store a state of the puzzle with some information
@@ -34,16 +34,20 @@ class Node:
         self.state = state
         self.parent = parent
         self.depth = depth
-        self.k = len(state) ** 0.5
         if self.state:
+            self.k = int(len(state) ** 0.5)
             self.stringState = "".join(str(i) for i in self.state)
 
     def showState(self):
+        print("Step " + str(self.depth) + ":")
         # print out the State
         for i in range(len(self.state)):
-            print(a[i], "|", end="")
+            print(self.state[i], "|", end="")
             if (i + 1) % self.k == 0:
                 print()
+        for i in range(self.k):
+            print("--", end="")
+        print()
 
 
 # function generateInitState: create a goal state and also start state (if users don't make init state themselves)
@@ -52,11 +56,11 @@ class Node:
 # - isRand: true if user wants to create a start state
 # Return: the node contains init state
 def generateInitState(k, init=None, isRand=True):
-    global goalState
+    global goalStringState
 
     a = [i for i in range(0, k * k)]
     # assign End State
-    goalState = a
+    goalStringState = "".join(str(i) for i in a)
 
     if isRand:
         # create a random input
@@ -71,33 +75,33 @@ def generateInitState(k, init=None, isRand=True):
 
     node = Node(a, None, 0)
     node.showState()
+    print("******************")
     return node
 
 
 # Function dfs
 # - initState: the input state (start state)
 # - return : End state (the goal state)
-def dfs(initState):
-    global goal_node
+def dfs(initNode):
+    global goalStringState
 
-    visitedStateSet = set()
-    stack = list([Node(initState, None, 0)])
+    visitedStateSet = set()  # list string of visited states
+    stack = list([initNode])
 
     while stack:
-
         node = stack.pop()
 
         visitedStateSet.add(node.stringState)
 
-        if node.state == goal_state:
+        if node.stringState == goalStringState:
             return node
 
         childNodes = findChildNodes(node)
 
         for child in childNodes:
-            if child.map not in visitedStateSet:
+            if child.stringState not in visitedStateSet:
                 stack.append(child)
-                visitedStateSet.add(child.map)
+                visitedStateSet.add(child.stringState)
 
 
 def findChildNodes(node):
@@ -126,6 +130,7 @@ def slide(position, parent):
         if index >= k:
             # swap 0 UP
             swap(childState, index, index - k)
+            return childState
         else:
             return None
     elif position == DOWN:
@@ -133,6 +138,7 @@ def slide(position, parent):
         if index < k * k - k:
             # swap 0 DOWN
             swap(childState, index, index + k)
+            return childState
         else:
             return None
     elif position == LEFT:
@@ -140,6 +146,7 @@ def slide(position, parent):
         if index not in range(0, k * k, k):
             # swap 0 DOWN
             swap(childState, index, index - 1)
+            return childState
         else:
             return None
     else:
@@ -147,6 +154,7 @@ def slide(position, parent):
         if index not in range(k - 1, k * k, k):
             # swap 0 RIGHT
             swap(childState, index, index + 1)
+            return childState
         else:
             return None
 
@@ -156,11 +164,18 @@ def swap(state, index0, destIndex):
     state[destIndex] = 0
 
 
+def showSolution(finalnode):
+    curNode = finalnode
+    while curNode:
+        curNode.showState()
+        curNode = curNode.parent
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--k",
-        default=3,
+        default=2,
         type=int,
         help="This is k-puzzle",
     )
@@ -178,6 +193,7 @@ def main():
         startState = generateInitState(args.k)
 
     resultState = dfs(startState)
+    showSolution(resultState)
 
 
 if __name__ == "__main__":
