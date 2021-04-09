@@ -5,12 +5,21 @@ import sys
 
 
 def main(args):
-    for row in read_initial(args[1]):
-        print(row)
+    grid = read_initial(args[1])
+    N = len(grid)
 
 
 def read_initial(input_file):
-    return [row for row in csv.reader(open(input_file))]
+    """Read initial numbers from input_file
+    Return a list of cell lists; each cell, if initially declared, is that number, else 0"""
+    return [
+        [(0 if cell == "" else int(cell)) for cell in row]
+        for row in csv.reader(open(input_file))
+    ]
+
+
+def quick_test():
+    main([None, "test.csv"])
 
 
 if __name__ == "__main__":
