@@ -32,13 +32,22 @@ def main(args):
         Grid(gen_random_grid(grid.initial), grid.initial)
         for _ in range(POPULATION_SIZE)
     ]
-    fitness_weights = [fitness(grid) for grid in candidates]
-    while not (0 in fitness_weights):
+    fitness_weights = list(map(fitness, candidates))
+    generation_id = 0
+    while not (grid.max_score in fitness_weights):
+        print("\n\nGeneration: ", generation_id)
+        for i in range(POPULATION_SIZE):
+            print_grid(candidates[i])
+            print("Score: ", fitness_weights[i])
         selected = random.choices(
             population=candidates, weights=fitness_weights, k=POPULATION_SIZE
         )
         children = crossover(selected)
-        fitness_weights = [fitness(grid) for grid in candidates]
+        candidates = list(map(mutate, children))
+        fitness_weights = list(map(fitness, candidates))
+        generation_id += 1
+    solution = candidates[fitness_weights.index(grid.max_score)]
+    print_grid(solution)
 
 
 def crossover(grids: list[Grid], children: list[Grid] = []) -> list[Grid]:
@@ -54,6 +63,14 @@ def crossover(grids: list[Grid], children: list[Grid] = []) -> list[Grid]:
             grids[1].current[0:point] + grids[0].current[point:N], grids[1].initial
         )
         return crossover(grids[2:], children + [child0, child1])
+
+
+def mutate(grid: Grid) -> Grid:
+    row = random_generator.integers(grid.N)
+    col = random_generator.integers(grid.N)
+    if grid.initial[row][col] == 0:
+        grid.current[row][col] = random_generator.integers(1, grid.N + 1)
+    return grid
 
 
 def print_grid(grid: Grid):
