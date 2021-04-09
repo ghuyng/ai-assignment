@@ -91,6 +91,9 @@ def dfs(initNode):
     while stack:
         node = stack.pop()
 
+        if node.stringState in visitedStateSet:
+            continue
+
         visitedStateSet.add(node.stringState)
 
         if node.stringState == goalStringState:
@@ -101,7 +104,6 @@ def dfs(initNode):
         for child in childNodes:
             if child.stringState not in visitedStateSet:
                 stack.append(child)
-                visitedStateSet.add(child.stringState)
 
 
 def findChildNodes(node):
@@ -164,6 +166,7 @@ def swap(state, index0, destIndex):
     state[destIndex] = 0
 
 
+# Print the solution step by step from the final state down to init state
 def showSolution(finalnode):
     curNode = finalnode
     while curNode:
