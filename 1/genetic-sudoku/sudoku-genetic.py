@@ -154,11 +154,7 @@ def fitness(grid: Grid):
 def fitness_sub(seq: list):
     """Return the number of unique elements in seq, excluding 0s since 0 cells are
     unfilled cells. The return value is positive."""
-    uniq_elements = np.unique(seq)
-    if 0 in seq:
-        return len(uniq_elements) - 1
-    else:
-        return len(uniq_elements)
+    return len(set(seq) - {0})
 
 
 def get_sub_grids(mat: list[list[int]]) -> list[list[int]]:
