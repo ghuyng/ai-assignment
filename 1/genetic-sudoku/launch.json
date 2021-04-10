@@ -3,7 +3,7 @@
     "configurations": [
         {
             "type": "python",
-            "args": ["test.csv", "1024"],
+            "args": ["test.csv", "4"],
             "cwd": [],
             "module": [],
             "program": "sudoku-genetic.py",

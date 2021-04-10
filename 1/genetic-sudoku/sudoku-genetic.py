@@ -71,7 +71,8 @@ def main(args):
             k=population.population_size,
         )
         # Breed selected candidates
-        children = crossover(selected)
+        # children = one_point_crossover(selected)
+        children = uniform_crossover(selected)
         # Mutate the children and have them replace candidates
         population.candidates = [
             mutate(child, population.initial) for child in children
@@ -85,14 +86,33 @@ def main(args):
     print(solution.to_string(population.initial.data))
 
 
-def crossover(candidates: list[Grid], children: list[Grid] = []) -> list[Grid]:
-    """Perform "crossover" step for each pair in candidates.
+def uniform_crossover(candidates: list[Grid]) -> list[Grid]:
+    N = len(candidates[0].data)
+    children = []
+    while candidates != []:
+        child0 = candidates[0]
+        child1 = candidates[1]
+        for i in range(random_generator.integers(N)):
+            point = random_generator.integers(N)
+            child0.data[point], child1.data[point] = (
+                child1.data[point],
+                child0.data[point],
+            )
+        candidates = candidates[2:]
+        children += [child0, child1]
+    return children
+
+
+def one_point_crossover(
+    candidates: list[Grid], children: list[Grid] = []
+) -> list[Grid]:
+    """Perform "one_point_crossover" step for each pair in candidates.
     Return the accumulated children."""
     if candidates == []:
         return children
     else:
         N = len(candidates[0].data)
-        # Identify the line to crossover
+        # Identify the line to one_point_crossover
         point = random_generator.integers(1, N - 1)
         # Crossover: split at `point`, swap [0,point) and [point,N)
         # normal list concatenation does not work on numpy matrices
@@ -102,17 +122,18 @@ def crossover(candidates: list[Grid], children: list[Grid] = []) -> list[Grid]:
         child1 = Grid(
             np.concatenate((candidates[1].data[0:point], candidates[0].data[point:N]))
         )
-        return crossover(candidates[2:], children + [child0, child1])
+        return one_point_crossover(candidates[2:], children + [child0, child1])
 
 
 def mutate(grid: Grid, initial: Grid) -> Grid:
     """Perform "mutate" on grid, leave initial cells intact."""
+    N = len(initial.data)
     # Randomly select a row and column
-    row = random_generator.integers(len(grid.data))
-    col = random_generator.integers(len(grid.data))
-    # Replace with a random value unless the cell is immutable
-    if initial.data[row][col] == 0:
-        grid.data[row][col] = random_generator.integers(1, len(initial.data) + 1)
+    for row in range(N):
+        col = random_generator.integers(N)
+        # Replace with a random value unless the cell is immutable
+        if initial.data[row][col] == 0:
+            grid.data[row][col] = random_generator.integers(1, N + 1)
     return grid
 
 
@@ -144,10 +165,9 @@ def fitness(grid: Grid):
     rows = grid.data
     cols = np.transpose(rows)
     subs = get_sub_grids(rows)
-    # These three are negative
-    rows_fitness = sum(fitness_sub(row) for row in rows)
-    cols_fitness = sum(fitness_sub(col) for col in cols)
-    subs_fitness = sum(fitness_sub(sub) for sub in subs)
+    rows_fitness = sum(map(fitness_sub, rows))
+    cols_fitness = sum(map(fitness_sub, cols))
+    subs_fitness = sum(map(fitness_sub, subs))
     return rows_fitness + cols_fitness + subs_fitness
 
 
