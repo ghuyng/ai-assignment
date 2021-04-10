@@ -1,14 +1,17 @@
 # N puzzle with Depth First Search (N=k*k-1) matrix k*k
 
-# Define problem state
-# Start state
-# End state
-# Rules to move
-# Price content function (if need)
-# Start state and end state must write function to generate
-# Using python 3.8
+# Start state: 
+# - [i(1),i(2),i(3),...,i(k-2),i(k-1)]
+# - i(k) in range [0,k-1]
+# - i(u) differs i(v) (u differs v) with u,v in range [0,k-1]
 
-# End state: [0,1,2,3,4,5,6,7,8]
+# Rules to move: suppose that we move value 0
+# -  Move left: [i(1),...,i(n-2),a,0,i(n+1),...,i(k-1)] -> [i(1),...,i(n-2),0,a,i(n+1),...,i(k-1)] (if 0 is not in the first column)
+# -  Move right: [i(1),...,i(n-2),0,a,i(n+1),...,i(k-1)] -> [i(1),...,i(n-2),a,0,i(n+1),...,i(k-1)] (if 0 is not in the last column)
+# -  Move up: [i(1),...,i(n-k),a,...,i(n),0,...,i(k-1)] -> [i(1),...,i(n-k),0,...,i(n),0,...,i(k-1)] (if 0 is not in the first row)
+# -  Move down: [i(1),...,i(n),0,...,i(n+k),a,...,i(k-1)] -> [i(1),...,i(n),a,...,i(n+k),0,...,i(k-1)] (if 0 is not in the last row)
+
+# End state: [0,1,2,3,...,k-2,k-1]
 #       0 | 1 | 2
 #       3 | 4 | 5
 #       6 | 7 | 8
@@ -107,6 +110,9 @@ def dfs(initNode):
 
     return None
 
+# function: findChildNodes: search childNode
+# - node: the previous node
+# return: a list that contains child's nodes
 def findChildNodes(node):
     childList = []
 
@@ -120,7 +126,10 @@ def findChildNodes(node):
 
     return childList
 
-
+# function slide: move the value 0
+# - position: UP, DOWN, LEFT, RIGHT
+# - parent: the previous node
+# return: an array that contains new state
 def slide(position, parent):
     childState = parent.state[:]
     # find index of 0 in parent state
@@ -161,7 +170,10 @@ def slide(position, parent):
         else:
             return None
 
-
+# function swap: change the position of value 0
+# - state: an array need to be change
+# - index0: index of value 0
+# - destIndex: index of value 0 's new position
 def swap(state, index0, destIndex):
     state[index0] = state[destIndex]
     state[destIndex] = 0
