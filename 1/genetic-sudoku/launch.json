@@ -1,0 +1,14 @@
+// Debug template(s)
+{
+    "configurations": [
+        {
+            "type": "python",
+            "args": ["test.csv", "1024"],
+            "cwd": [],
+            "module": [],
+            "program": "sudoku-genetic.py",
+            "request": "launch",
+            "name": "Python :: Run sudoku-genetic.py"
+        }
+    ]
+}
