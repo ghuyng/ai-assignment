@@ -18,7 +18,8 @@ class Grid:
     def to_string(self, init: list[list[int]]):
         N = len(self.data)
         rows_to_strs = [
-            reduce(
+            "\n"
+            + reduce(
                 operator.add,
                 [
                     str(self.data[row][col])
@@ -27,7 +28,6 @@ class Grid:
                     for col in range(N)
                 ],
             )
-            + "\n"
             for row in range(N)
         ]
         return reduce(operator.add, rows_to_strs)
@@ -60,9 +60,7 @@ def main(args):
 
         # Print info
         print("\n\nGeneration: ", generation_no)
-        for i in range(population.population_size):
-            print(population.candidates[i].to_string(population.initial.data))
-            print("Score: ", fitness_weights[i])
+        print(np.average(fitness_weights))
 
         # Randomly select candidates by fitness weights
         selected = random.choices(
@@ -70,6 +68,7 @@ def main(args):
             weights=fitness_weights,
             k=population.population_size,
         )
+        # print(list(map(fitness, selected)), "\n")
         # Breed selected candidates
         # children = one_point_crossover(selected)
         children = uniform_crossover(selected)
@@ -125,15 +124,24 @@ def one_point_crossover(
         return one_point_crossover(candidates[2:], children + [child0, child1])
 
 
+def repeated_positions(seq: list):
+    return [i for i in range(len(seq)) if seq[i] in seq[0:i]]
+
+
 def mutate(grid: Grid, initial: Grid) -> Grid:
     """Perform "mutate" on grid, leave initial cells intact."""
     N = len(initial.data)
     # Randomly select a row and column
     for row in range(N):
-        col = random_generator.integers(N)
-        # Replace with a random value unless the cell is immutable
-        if initial.data[row][col] == 0:
-            grid.data[row][col] = random_generator.integers(1, N + 1)
+        positions = repeated_positions(grid.data[row])
+        if positions == []:
+            cols = [random_generator.integers(N)]
+        else:
+            cols = positions
+        for col in cols:
+            # Replace with a random value unless the cell is immutable
+            if initial.data[row][col] == 0:
+                grid.data[row][col] = random_generator.integers(1, N + 1)
     return grid
 
 
