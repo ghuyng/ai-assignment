@@ -1,3 +1,22 @@
+# Start state: 
+# - Start point with position
+# - End point with position
+# - Barriers with position
+
+# Rules to move: suppose that we move value 0
+# - Start point can move up (x, y+1)
+# - Start point can move down (x, y-1)
+# - Start point can move left (x-1, y)
+# - Start point can move right (x+1,y)
+
+# Heuristic function: 
+# - cost function: f(x) = h(x) + g(x)
+#   + h(x) is the heuristic function equal to abs(x_cur-x_end) + abs(y_cur-y_end)
+#   + g(x) is the shortest path from start node to x
+
+# End state: 
+# - Start point reach End point : x_start = x_end, y_start = y_end
+
 import pygame
 from draw_UI import RED, GREEN, BLUE, YELLOW, WHITE, BLACK , PURPLE , ORANGE, GREY, TURQUOISE
 from draw_UI import make_grid, draw, draw_grid

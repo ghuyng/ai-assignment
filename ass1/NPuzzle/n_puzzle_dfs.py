@@ -6,10 +6,10 @@
 # - i(u) differs i(v) (u differs v) with u,v in range [0,k-1]
 
 # Rules to move: suppose that we move value 0
-# -  Move left: [i(1),...,i(n-2),a,0,i(n+1),...,i(k-1)] -> [i(1),...,i(n-2),0,a,i(n+1),...,i(k-1)] (if 0 is not in the first column)
-# -  Move right: [i(1),...,i(n-2),0,a,i(n+1),...,i(k-1)] -> [i(1),...,i(n-2),a,0,i(n+1),...,i(k-1)] (if 0 is not in the last column)
-# -  Move up: [i(1),...,i(n-k),a,...,i(n),0,...,i(k-1)] -> [i(1),...,i(n-k),0,...,i(n),0,...,i(k-1)] (if 0 is not in the first row)
-# -  Move down: [i(1),...,i(n),0,...,i(n+k),a,...,i(k-1)] -> [i(1),...,i(n),a,...,i(n+k),0,...,i(k-1)] (if 0 is not in the last row)
+# -  Move left: [i(0),...,i(n-2),a,0,i(n+1),...,i(k-1)] -> [i(1),...,i(n-2),0,a,i(n+1),...,i(k-1)] (if 0 is not in the first column)
+# -  Move right: [i(0),...,i(n-2),0,a,i(n+1),...,i(k-1)] -> [i(1),...,i(n-2),a,0,i(n+1),...,i(k-1)] (if 0 is not in the last column)
+# -  Move up: [i(0),...,i(n-k),a,...,i(n),0,...,i(k-1)] -> [i(1),...,i(n-k),0,...,i(n),0,...,i(k-1)] (if 0 is not in the first row)
+# -  Move down: [i(0),...,i(n),0,...,i(n+k),a,...,i(k-1)] -> [i(1),...,i(n),a,...,i(n+k),0,...,i(k-1)] (if 0 is not in the last row)
 
 # End state: [0,1,2,3,...,k-2,k-1]
 #       0 | 1 | 2
@@ -117,8 +117,8 @@ def findChildNodes(node):
     childList = []
 
     childList.append(Node(slide(RIGHT, node), node, node.depth + 1))
-    childList.append(Node(slide(LEFT, node), node, node.depth + 1))
     childList.append(Node(slide(DOWN, node), node, node.depth + 1))
+    childList.append(Node(slide(LEFT, node), node, node.depth + 1))
     childList.append(Node(slide(UP, node), node, node.depth + 1))
 
     # remove None Node
