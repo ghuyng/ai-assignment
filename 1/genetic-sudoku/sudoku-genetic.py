@@ -72,6 +72,13 @@ def main(args):
         # Print info
         print("\n\nGeneration: ", generation_no)
         print(np.average(fitness_weights))
+        print("Max:")
+        print(
+            population.candidates[
+                fitness_weights.index(max(fitness_weights))
+            ].to_string(population.initial.data)
+        )
+        print("Score:", max(fitness_weights))
 
         # Randomly select candidates by fitness weights
         # Breed selected candidates
@@ -141,17 +148,19 @@ def repeated_positions(seq: List):
 def mutate(grid: Grid, initial: Grid) -> Grid:
     """Perform "mutate" on grid, leave initial cells intact."""
     N = initial.N
-    # Randomly select a row and column
-    for row in range(N):
-        positions = repeated_positions(grid.data[row])
-        if positions == []:
-            cols = [random_generator.integers(N)]
-        else:
-            cols = positions
-        for col in cols:
-            # Replace with a random value unless the cell is immutable
-            if initial.data[row][col] == 0:
-                grid.data[row][col] = random_generator.integers(1, N + 1)
+    for subgrid_NO in range(N):
+        fixed_positions, mutable_positions = fixed_and_mutable_positions_in_subgrid(
+            initial, subgrid_NO
+        )
+        if len(mutable_positions) >= 2:
+            # Select 2 random position that are mutable
+            random.shuffle(mutable_positions)
+            pos0, pos1 = mutable_positions[:2]
+            # Swap them
+            grid.data[pos0[0]][pos0[1]], grid.data[pos1[0]][pos1[1]] = (
+                grid.data[pos1[0]][pos1[1]],
+                grid.data[pos0[0]][pos1[1]],
+            )
     return grid
 
 
@@ -169,11 +178,9 @@ def fill_subgrid(subgrid_NO: int, grid: Grid, initial: Grid):
     """Fill grid's subgrid_NO-nth subgrid with unique for each cell.
     Respect initial."""
     N = initial.N
-    positions = get_subgrid_positions(N, subgrid_NO)
-    fixed_positions = [
-        (row, col) for (row, col) in positions if initial.data[row][col] != 0
-    ]
-    mutable_positions = list(set(positions) - set(fixed_positions))
+    fixed_positions, mutable_positions = fixed_and_mutable_positions_in_subgrid(
+        grid, subgrid_NO
+    )
     fixed_values = [initial.data[row][col] for (row, col) in fixed_positions]
     missing_values = list(set(range(1, N + 1)) - set(fixed_values))
     random.shuffle(missing_values)
@@ -181,6 +188,16 @@ def fill_subgrid(subgrid_NO: int, grid: Grid, initial: Grid):
         grid.data[row][col] = missing_values[0]
         missing_values = missing_values[1:]
     return grid
+
+
+def fixed_and_mutable_positions_in_subgrid(initial_grid: Grid, subgrid_NO):
+    N = initial_grid.N
+    positions = get_subgrid_positions(N, subgrid_NO)
+    fixed_positions = [
+        (row, col) for (row, col) in positions if initial_grid.data[row][col] != 0
+    ]
+    mutable_positions = list(set(positions) - set(fixed_positions))
+    return (fixed_positions, mutable_positions)
 
 
 def get_subgrid_positions(N, subgrid_NO):
