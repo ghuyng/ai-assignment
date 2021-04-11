@@ -35,6 +35,7 @@ def main(args):
     solve1(grid)
 
 def solve1(grid):
+    """A sudoku solver, used for stratery pattern."""
     MUTATION_PROB = 20
     candidates = [
         Grid(gen_random_grid(grid.initial), grid.initial)
@@ -49,9 +50,6 @@ def solve1(grid):
 
         # Print info
         print("\n\nGeneration: ", generation_no)
-        # for i in range(POPULATION_SIZE):
-        #     print_grid(candidates[i])
-        #     print("Score: ", fitness_weights[i])
 
         print (" Max score = ", max(fitness_weights))
         print (" Mean = ", sum(fitness_weights) / len(fitness_weights))
@@ -110,21 +108,22 @@ def crossover(grids: List[Grid], children: List[Grid] = []) -> List[Grid]:
         return child1, child2
 
 def uniform_crossover(parents):
-        c1, c2 = [], []
-        N = parents[0].N
-        for i in range(N):
-            for j in range(N):
-                point = random_generator.integers(100)
-                if (point < 50):
-                    c1 += [parents[0].current[i][j]]
-                    c2 += [parents[1].current[i][j]]
-                else:
-                    c1 += [parents[1].current[i][j]]
-                    c2 += [parents[0].current[i][j]]
+    """Uniform crossover: Swap genes at random points instead of exchanging segments."""
+    c1, c2 = [], []
+    N = parents[0].N
+    for i in range(N):
+        for j in range(N):
+            point = random_generator.integers(100)
+            if (point < 50):
+                c1 += [parents[0].current[i][j]]
+                c2 += [parents[1].current[i][j]]
+            else:
+                c1 += [parents[1].current[i][j]]
+                c2 += [parents[0].current[i][j]]
 
-        child1 = Grid(np.array(c1).reshape(N, N), parents[0].initial)
-        child2 = Grid(np.array(c2).reshape(N, N), parents[0].initial)
-        return child1, child2
+    child1 = Grid(np.array(c1).reshape(N, N), parents[0].initial)
+    child2 = Grid(np.array(c2).reshape(N, N), parents[0].initial)
+    return child1, child2
 
 def mutate(grid: Grid) -> Grid:
     """Perform "mutate" on grid."""
@@ -169,12 +168,6 @@ def read_initial(input_file):
         for row in csv.reader(open(input_file))
     ]
 
-
-def quick_test():
-    """For REPL interaction."""
-    main([None, "test.csv"])
-
-
 def fitness(grid: Grid):
     """Determine grid's fitness score."""
     rows = grid.current
@@ -184,22 +177,13 @@ def fitness(grid: Grid):
     rows_fitness = sum(fitness_sub(row) for row in rows)
     cols_fitness = sum(fitness_sub(col) for col in cols)
     subs_fitness = sum(fitness_sub(sub) for sub in subs)
-    # Ensure positiveness by adding with the maximum score
-    # return rows_fitness + cols_fitness + subs_fitness + grid.max_score
     return rows_fitness + cols_fitness + subs_fitness
 
 
 def fitness_sub(seq: List):
-    """Return 0 - (negative) the number duplicate elements (excluding the first to be
-    duplicated one) and 0s in seq.
-    Since 0 cells are unfilled cells."""
+    """Return the number of unique elements."""
     uniq_elements = np.unique(seq)
     return len(uniq_elements)
-    # neg_repeated_amount = len(uniq_elements) - len(seq)
-    # if 0 in seq:
-    #     return neg_repeated_amount - 1
-    # else:
-    #     return neg_repeated_amount
 
 
 def get_sub_grids(mat: List[List[int]]) -> List[List[int]]:
@@ -223,9 +207,6 @@ def sub_grid_id(row, col, sqrt_N):
     ...
 6 	6 	6 	7 	7 	7 	8 	8 	8 	"""
     return (row // sqrt_N) * sqrt_N + col // sqrt_N
-
-
-# quick_test()
 
 if __name__ == "__main__":
     main(sys.argv)
