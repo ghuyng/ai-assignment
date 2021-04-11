@@ -138,7 +138,21 @@ def crossover(parents: List[Grid]) -> List[Grid]:
         best_cols_data += copy.deepcopy(
             parents_cols[best_cols[i]][lower_to_copy:upper_to_copy]
         )
+    # c0, c1 = [Grid(best_rows_data), Grid(transpose_raw_list(best_cols_data))]
+    # if False in list(map(test_subgrids, [c0, c1])):
+    # print("ERROR by crossover!!!")
     return [Grid(best_rows_data), Grid(transpose_raw_list(best_cols_data))]
+
+
+def test_subgrids(grid: Grid):
+    N = grid.N
+    n = sqrt_squared(N)
+    for i in range(N):
+        positions = get_subgrid_positions(N, i)
+        values = [grid.data[row][col] for (row, col) in positions]
+        if len(set(values)) != N:
+            return False
+    return True
 
 
 def repeated_positions(seq: List):
@@ -148,6 +162,7 @@ def repeated_positions(seq: List):
 def mutate(grid: Grid, initial: Grid) -> Grid:
     """Perform "mutate" on grid, leave initial cells intact."""
     N = initial.N
+    origin_grid = copy.deepcopy(grid.data)
     for subgrid_NO in range(N):
         fixed_positions, mutable_positions = fixed_and_mutable_positions_in_subgrid(
             initial, subgrid_NO
@@ -157,10 +172,13 @@ def mutate(grid: Grid, initial: Grid) -> Grid:
             random.shuffle(mutable_positions)
             pos0, pos1 = mutable_positions[:2]
             # Swap them
+            # My brain smoked when writing the following line, so don't ask me its meaning
             grid.data[pos0[0]][pos0[1]], grid.data[pos1[0]][pos1[1]] = (
                 grid.data[pos1[0]][pos1[1]],
-                grid.data[pos0[0]][pos1[1]],
+                grid.data[pos0[0]][pos0[1]],
             )
+    # if not test_subgrids(grid):
+    # print("ERROR by mutate!!!")
     return grid
 
 
