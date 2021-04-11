@@ -97,7 +97,11 @@ def main(args):
         # Mutate the children and have them replace candidates
         population.candidates = sorted(
             population.candidates
-            + [mutate(child, population.initial) for child in children],
+            + [
+                mutation
+                for child in children
+                for mutation in mutate_multiple(child, population.initial)
+            ],
             key=fitness,
         )[-population.population_size :]
         # Re-calculate fitness weights
@@ -157,6 +161,13 @@ def test_subgrids(grid: Grid):
 
 def repeated_positions(seq: List):
     return [i for i in range(len(seq)) if seq[i] in seq[0:i]]
+
+
+def mutate_multiple(grid: Grid, initial: Grid) -> List[Grid]:
+    n = sqrt_squared(initial.N)
+    offsprings = [mutate(Grid(grid.data), initial) for _ in range(initial.N)]
+    offsprings.sort(key=fitness)
+    return offsprings[-n:]
 
 
 def mutate(grid: Grid, initial: Grid) -> Grid:
