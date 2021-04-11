@@ -54,7 +54,7 @@ def main(args):
     # Read the partially filled grid from file
     population = Population(read_initial(args[1]), int(args[2]))
     # Weight each candidates
-    fitness_weights = List(map(fitness, population.candidates))
+    fitness_weights = list(map(fitness, population.candidates))
     # Record current generation's NO.
     generation_no = 0
     # Loop until a perfect solution is found
@@ -70,7 +70,7 @@ def main(args):
             weights=fitness_weights,
             k=population.population_size,
         )
-        # print(List(map(fitness, selected)), "\n")
+        # print(list(map(fitness, selected)), "\n")
         # Breed selected candidates
         # children = one_point_crossover(selected)
         children = uniform_crossover(selected)
@@ -79,7 +79,7 @@ def main(args):
             mutate(child, population.initial) for child in children
         ]
         # Re-calculate fitness weights
-        fitness_weights = List(map(fitness, population.candidates))
+        fitness_weights = list(map(fitness, population.candidates))
         generation_no += 1
 
     # Get the perfect solution and display it
@@ -165,9 +165,9 @@ def fill_subgrid(subgrid_NO: int, grid: Grid, initial: Grid):
     fixed_positions = [
         (row, col) for (row, col) in positions if initial.data[row][col] != 0
     ]
-    mutable_positions = List(set(positions) - set(fixed_positions))
+    mutable_positions = list(set(positions) - set(fixed_positions))
     fixed_values = [initial.data[row][col] for (row, col) in fixed_positions]
-    missing_values = List(set(range(1, N + 1)) - set(fixed_values))
+    missing_values = list(set(range(1, N + 1)) - set(fixed_values))
     random.shuffle(missing_values)
     for (row, col) in mutable_positions:
         grid.data[row][col] = missing_values[0]
