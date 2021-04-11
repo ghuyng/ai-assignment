@@ -101,7 +101,15 @@ def main(args):
         population.candidates = [
             (
                 mutate(child, population.initial)
-                if random_generator.random() >= fitness(child) / population.max_score
+                if (
+                    random_generator.random()
+                    < max(
+                        1 - fitness(child) / population.max_score,
+                        # 0.1
+                        0
+                        #
+                    )
+                )
                 else child
             )
             for child in children
