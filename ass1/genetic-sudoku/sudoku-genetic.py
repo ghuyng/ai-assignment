@@ -71,14 +71,14 @@ def main(args):
 
         # Print info
         print("\n\nGeneration: ", generation_no)
-        print(np.average(fitness_weights))
-        print("Max:")
+        print("Average: ", np.average(fitness_weights))
+        print("Current best:")
         print(
             population.candidates[
                 fitness_weights.index(max(fitness_weights))
             ].to_string(population.initial.data)
         )
-        print("Score:", max(fitness_weights))
+        print("Score:", max(fitness_weights), "/", population.max_score)
 
         # Randomly select candidates by fitness weights
         # Breed selected candidates
@@ -252,17 +252,19 @@ def quick_test():
 
 def fitness(grid: Grid) -> int:
     """Determine grid's fitness score."""
+    N = grid.N
     rows = grid.data
-    cols = transpose_raw_list(rows)
     rows_fitness = sum(map(fitness_sub, rows))
-    cols_fitness = sum(map(fitness_sub, cols))
+    cols_fitness = sum(
+        fitness_sub([grid.data[row][col] for row in range(N)]) for col in range(N)
+    )
     return rows_fitness + cols_fitness
 
 
 def fitness_sub(seq: List) -> int:
     """Return the number of unique elements in seq, excluding 0s since 0 cells are
     unfilled cells. The return value is positive."""
-    return len(set(seq))
+    return len(np.unique(seq))
 
 
 def sub_grid_id(row, col, sqrt_N) -> int:
