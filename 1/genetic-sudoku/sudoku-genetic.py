@@ -7,15 +7,17 @@ import numpy as np
 from dataclasses import dataclass
 import random
 import operator
+from typing import List
+import copy
 
 random_generator = np.random.default_rng()
 
 
 @dataclass
 class Grid:
-    data: list[list[int]]
+    data: List[List[int]]
 
-    def to_string(self, init: list[list[int]]):
+    def to_string(self, initial: List[List[int]]):
         N = len(self.data)
         rows_to_strs = [
             "\n"
@@ -23,7 +25,7 @@ class Grid:
                 operator.add,
                 [
                     str(self.data[row][col])
-                    + (" " if init[row][col] == 0 else ".")
+                    + (" " if initial[row][col] == 0 else ".")
                     + "\t"
                     for col in range(N)
                 ],
@@ -35,16 +37,16 @@ class Grid:
 
 @dataclass
 class Population:
-    def __init__(self, initial: list[list[int]], population_size: int):
+    def __init__(self, initial: List[List[int]], population_size: int):
         self.initial = Grid(initial)
         self.N = len(initial)
         self.sqrtN = int(np.sqrt(self.N))
         # There are N^2 cells, each can take -1 penalty from : row, column and sub grid constraints
-        self.max_score = 3 * (self.N ** 2)
+        self.max_score = 2 * (self.N ** 2)
         self.population_size = population_size
         # Generate initial population
         self.candidates = [
-            Grid(gen_random_grid(self.initial)) for _ in range(self.population_size)
+            gen_random_grid(self.initial) for _ in range(self.population_size)
         ]
 
 
@@ -52,7 +54,7 @@ def main(args):
     # Read the partially filled grid from file
     population = Population(read_initial(args[1]), int(args[2]))
     # Weight each candidates
-    fitness_weights = list(map(fitness, population.candidates))
+    fitness_weights = List(map(fitness, population.candidates))
     # Record current generation's NO.
     generation_no = 0
     # Loop until a perfect solution is found
@@ -68,7 +70,7 @@ def main(args):
             weights=fitness_weights,
             k=population.population_size,
         )
-        # print(list(map(fitness, selected)), "\n")
+        # print(List(map(fitness, selected)), "\n")
         # Breed selected candidates
         # children = one_point_crossover(selected)
         children = uniform_crossover(selected)
@@ -77,7 +79,7 @@ def main(args):
             mutate(child, population.initial) for child in children
         ]
         # Re-calculate fitness weights
-        fitness_weights = list(map(fitness, population.candidates))
+        fitness_weights = List(map(fitness, population.candidates))
         generation_no += 1
 
     # Get the perfect solution and display it
@@ -85,7 +87,7 @@ def main(args):
     print(solution.to_string(population.initial.data))
 
 
-def uniform_crossover(candidates: list[Grid]) -> list[Grid]:
+def uniform_crossover(candidates: List[Grid]) -> List[Grid]:
     N = len(candidates[0].data)
     children = []
     while candidates != []:
@@ -103,8 +105,8 @@ def uniform_crossover(candidates: list[Grid]) -> list[Grid]:
 
 
 def one_point_crossover(
-    candidates: list[Grid], children: list[Grid] = []
-) -> list[Grid]:
+    candidates: List[Grid], children: List[Grid] = []
+) -> List[Grid]:
     """Perform "one_point_crossover" step for each pair in candidates.
     Return the accumulated children."""
     if candidates == []:
@@ -114,7 +116,7 @@ def one_point_crossover(
         # Identify the line to one_point_crossover
         point = random_generator.integers(1, N - 1)
         # Crossover: split at `point`, swap [0,point) and [point,N)
-        # normal list concatenation does not work on numpy matrices
+        # normal List concatenation does not work on numpy matrices
         child0 = Grid(
             np.concatenate((candidates[0].data[0:point], candidates[1].data[point:N]))
         )
@@ -124,7 +126,7 @@ def one_point_crossover(
         return one_point_crossover(candidates[2:], children + [child0, child1])
 
 
-def repeated_positions(seq: list):
+def repeated_positions(seq: List):
     return [i for i in range(len(seq)) if seq[i] in seq[0:i]]
 
 
@@ -145,18 +147,44 @@ def mutate(grid: Grid, initial: Grid) -> Grid:
     return grid
 
 
-def gen_random_grid(init: Grid) -> list[list[int]]:
-    """Return a random grid from the argument by randomly fill all mutable cells."""
-    N = len(init.data)
-    return [
-        [(random_generator.integers(1, N + 1) if cell == 0 else cell) for cell in row]
-        for row in init.data
+def gen_random_grid(initial: Grid) -> Grid:
+    """Return a random grid from the argument by filling all mutable cells.
+    Sudoku's constraint for each subgrid is satisfied."""
+    N = len(initial.data)
+    grid = Grid(copy.deepcopy(initial.data))
+    for i in range(N):
+        fill_subgrid(i, grid, initial)
+    return grid
+
+
+def fill_subgrid(subgrid_NO: int, grid: Grid, initial: Grid):
+    """Fill grid's subgrid_NO-nth subgrid with unique for each cell.
+    Respect initial."""
+    N = len(initial.data)
+    positions = get_subgrid_positions(N, subgrid_NO)
+    fixed_positions = [
+        (row, col) for (row, col) in positions if initial.data[row][col] != 0
     ]
+    mutable_positions = List(set(positions) - set(fixed_positions))
+    fixed_values = [initial.data[row][col] for (row, col) in fixed_positions]
+    missing_values = List(set(range(1, N + 1)) - set(fixed_values))
+    random.shuffle(missing_values)
+    for (row, col) in mutable_positions:
+        grid.data[row][col] = missing_values[0]
+        missing_values = missing_values[1:]
+    return grid
 
 
-def read_initial(input_file) -> list[list[int]]:
+def get_subgrid_positions(N, subgrid_NO):
+    n = int(np.sqrt(N))
+    rows = range(subgrid_NO // n * n, subgrid_NO // n * n + n)
+    cols = range((subgrid_NO % n) * n, (subgrid_NO % n) * n + n)
+    return [(row, col) for row in rows for col in cols]
+
+
+def read_initial(input_file) -> List[List[int]]:
     """Read initial numbers from input_file
-    Return a list of cell lists; each cell, if initially declared, contains that number, else 0."""
+    Return a List of cell Lists; each cell, if initially declared, contains that number, else 0."""
     return [
         [(0 if cell == "" else int(cell)) for cell in row]
         for row in csv.reader(open(input_file))
@@ -172,28 +200,26 @@ def fitness(grid: Grid) -> int:
     """Determine grid's fitness score."""
     rows = grid.data
     cols = np.transpose(rows)
-    subs = get_sub_grids(rows)
     rows_fitness = sum(map(fitness_sub, rows))
     cols_fitness = sum(map(fitness_sub, cols))
-    subs_fitness = sum(map(fitness_sub, subs))
-    return rows_fitness + cols_fitness + subs_fitness
+    return rows_fitness + cols_fitness
 
 
-def fitness_sub(seq: list) -> int:
+def fitness_sub(seq: List) -> int:
     """Return the number of unique elements in seq, excluding 0s since 0 cells are
     unfilled cells. The return value is positive."""
-    return len(set(seq) - {0})
+    return len(set(seq))
 
 
-def get_sub_grids(mat: list[list[int]]) -> list[list[int]]:
+def get_sub_grids(mat: List[List[int]]) -> List[List[int]]:
     """Return N sub squared grids from NxN grid."""
     N = len(mat)
     sqrt_N = int(np.sqrt(N))
-    sub_grids_as_lists = [[] for _ in range(N)]
+    sub_grids_as_Lists = [[] for _ in range(N)]
     for row in range(N):
         for col in range(N):
-            sub_grids_as_lists[sub_grid_id(row, col, sqrt_N)].append(mat[row][col])
-    return sub_grids_as_lists
+            sub_grids_as_Lists[sub_grid_id(row, col, sqrt_N)].append(mat[row][col])
+    return sub_grids_as_Lists
 
 
 def sub_grid_id(row, col, sqrt_N) -> int:
