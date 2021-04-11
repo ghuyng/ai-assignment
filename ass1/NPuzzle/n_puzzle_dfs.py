@@ -182,11 +182,12 @@ def swap(state, index0, destIndex):
 # Print the solution step by step from the final state down to init state
 def showSolution(finalnode):
     if finalnode:
+        depth = finalnode.depth
         curNode = finalnode
         while curNode:
             curNode.showState()
             curNode = curNode.parent
-
+        print("Number of steps:" + str(depth))
     else:
         print("No solution")
 
