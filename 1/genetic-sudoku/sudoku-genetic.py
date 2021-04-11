@@ -137,7 +137,7 @@ def mutate(grid: Grid, initial: Grid) -> Grid:
     return grid
 
 
-def gen_random_grid(init: Grid):
+def gen_random_grid(init: Grid) -> list[list[int]]:
     """Return a random grid from the argument by randomly fill all mutable cells."""
     N = len(init.data)
     return [
@@ -146,7 +146,7 @@ def gen_random_grid(init: Grid):
     ]
 
 
-def read_initial(input_file):
+def read_initial(input_file) -> list[list[int]]:
     """Read initial numbers from input_file
     Return a list of cell lists; each cell, if initially declared, contains that number, else 0."""
     return [
@@ -157,10 +157,10 @@ def read_initial(input_file):
 
 def quick_test():
     """For REPL interaction."""
-    main([None, "test.csv", "1024"])
+    main([None, "test-4x4.csv", "1024"])
 
 
-def fitness(grid: Grid):
+def fitness(grid: Grid) -> int:
     """Determine grid's fitness score."""
     rows = grid.data
     cols = np.transpose(rows)
@@ -171,7 +171,7 @@ def fitness(grid: Grid):
     return rows_fitness + cols_fitness + subs_fitness
 
 
-def fitness_sub(seq: list):
+def fitness_sub(seq: list) -> int:
     """Return the number of unique elements in seq, excluding 0s since 0 cells are
     unfilled cells. The return value is positive."""
     return len(set(seq) - {0})
@@ -188,7 +188,7 @@ def get_sub_grids(mat: list[list[int]]) -> list[list[int]]:
     return sub_grids_as_lists
 
 
-def sub_grid_id(row, col, sqrt_N):
+def sub_grid_id(row, col, sqrt_N) -> int:
     """Return the appropriate ID of sub grid that cell at row, col would land, given N.
     For example:
     0   0   0   1   1   1   2   2   2
@@ -201,6 +201,7 @@ def sub_grid_id(row, col, sqrt_N):
 
 
 # quick_test()
+# pop4 = Population(read_initial("test-4x4.csv"), 4)
 
 if __name__ == "__main__":
     main(sys.argv)
