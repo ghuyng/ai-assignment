@@ -2,6 +2,7 @@
 
 from functools import reduce
 import csv
+from os import scandir
 import sys
 import numpy as np
 from dataclasses import dataclass
@@ -13,6 +14,9 @@ import copy
 random_generator = np.random.default_rng()
 
 sqrt_squared = lambda arg: int(np.sqrt(arg))
+
+ELITE_RATIO = 1 / 5
+COUPLES_RATIO = (1 - ELITE_RATIO) / 2
 
 
 @dataclass
@@ -90,20 +94,19 @@ def main(args):
                         population=population.candidates, weights=fitness_weights, k=2
                     )
                 )
-                for _ in range(population.population_size // 2)
+                for _ in range(int(population.population_size * COUPLES_RATIO))
             ]
             for child in pair
         ]
-        # Mutate the children and have them replace candidates
-        population.candidates = sorted(
-            population.candidates
-            + [
-                mutation
-                for child in children
-                for mutation in mutate_multiple(child, population.initial)
-            ],
-            key=fitness,
-        )[-population.population_size :]
+        population.candidates = [
+            (
+                mutate(child, population.initial)
+                if random_generator.random() >= fitness(child) / population.max_score
+                else child
+            )
+            for child in children
+        ] + sorted(population.candidates, key=fitness)[-len(children) :]
+
         # Re-calculate fitness weights
         fitness_weights = list(map(fitness, population.candidates))
         generation_no += 1
