@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import numpy as np
-
+from functools import reduce
+import operator
 
 INITIAL_BOARD = [
     [1, 1, 1, 1, 1],
@@ -10,6 +11,13 @@ INITIAL_BOARD = [
     [-1, 0, 0, 0, -1],
     [-1, -1, -1, -1, -1],
 ]
+
+
+def board_to_string(board):
+    return reduce(
+        operator.add,
+        [("\t " if i > 0 else "\n") + str(row[i]) for row in board for i in range(5)],
+    )
 
 
 def generate_all_moves(position):
