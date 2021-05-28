@@ -28,7 +28,7 @@ def generate_all_moves(position):
         (position[0] + i, position[1] + j)
         for i in [-1, 0, 1]
         for j in [-1, 0, 1]
-        if ((i != 0 or j != 0) and (can_go_in_8_directions or i * j == 0))
+        if ((i != 0 or j != 0) and (can_go_in_8_directions or i == 0 or j == 0))
     ]
     return [
         (row, col) for (row, col) in unbounded_moves if (0 <= row < 5 and 0 <= col < 5)
