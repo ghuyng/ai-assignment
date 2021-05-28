@@ -4,6 +4,8 @@ import numpy as np
 from functools import reduce
 import operator
 
+from typing import List, Tuple
+
 INITIAL_BOARD = [
     [1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1],
@@ -28,10 +30,12 @@ def generate_all_moves(position):
         for j in [-1, 0, 1]
         if ((i != 0 or j != 0) and (can_go_in_8_directions or i * j == 0))
     ]
-    return [(row, col) for (row, col) in unbounded_moves if (row >= 0 and col >= 0)]
+    return [
+        (row, col) for (row, col) in unbounded_moves if (0 <= row < 5 and 0 <= col < 5)
+    ]
 
 
-def generate_legal_moves(position, board):
+def generate_legal_moves(position, board) -> List[Tuple]:
     moves = generate_all_moves(position)
     return [(i, j) for (i, j) in moves if board[i][j] == 0]
 
@@ -47,12 +51,15 @@ def get_winner(board):
 
 
 def board_after_move(source, dest, board):
-    board[source[0]][source[1]], board[dest[0]][dest[1]] = (
-        board[dest[0]][dest[1]],
-        board[source[0]][source[1]],
+    x_old, y_old, x_new, y_new = source[0], source[1], dest[0], dest[1]
+    board[x_old][y_old], board[x_new][y_new] = (
+        board[x_new][y_new],
+        board[x_old][y_old],
     )
     return board
 
 
-def move(board, player):
+def move(
+    board: List[List[int]], player: int
+) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     return ((-1, -1), (-1, -1))
