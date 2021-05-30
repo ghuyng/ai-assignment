@@ -30,7 +30,9 @@ def generate_all_moves(position):
         for j in [-1, 0, 1]
         if ((i != 0 or j != 0) and (can_go_in_8_directions or i * j == 0))
     ]
-    return [(row, col) for (row, col) in unbounded_moves if (row >= 0 and col >= 0)]
+    return [
+        (row, col) for (row, col) in unbounded_moves if (0 <= row < 5 and 0 <= col < 5)
+    ]
 
 
 def generate_legal_moves(position, board):
@@ -42,7 +44,7 @@ def generate_all_positions_moves(board, player):
     for i in range(5):
         for j in range(5):
             if board[i][j] == player:
-                result += generate_legal_moves((i,j))
+                result += generate_legal_moves((i,j), board)
     return result
 
 
@@ -72,8 +74,8 @@ class Node:
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.untriedMoves = generate_all_positions_moves(state, player) # future child nodes
-        self.playerJustMoved = state.player # previous player
+        self.untriedMoves = generate_all_positions_moves(state, -player) # future child nodes
+        self.playerJustMoved = player # previous player
 
     def UCTChooseChild(self):
         """lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
@@ -151,7 +153,18 @@ def UCT(player, rootstate, iter, verbose = False):
 
 def move(board, player):
 
-    choice =  UCT(-player, board, 1000)
+    choice =  UCT(-player, board, 10)
     if choice:
         return choice
     return None
+
+if __name__ == "__main__":
+    board = INITIAL_BOARD
+    # while (get_winner(board) == 0):
+    #     src, des = move(board, -1)
+    #     board = board_after_move(src, des, board)
+    #     print(board_to_string(board))
+    #     player = -player
+    src, des = move(board, -1)
+    board = board_after_move(src, des, board)
+    print(board_to_string(board))
