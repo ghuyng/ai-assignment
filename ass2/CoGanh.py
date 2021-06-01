@@ -17,7 +17,7 @@ INITIAL_BOARD = [
 ]
 
 # Whether the chess piece at [i][j] is able to travel diagonally
-DIAGONAL_OR_CROSSES_ONLY = [[(i + j) % 2 == 0 for i in range(5)] for j in range(5)]
+DIAGONAL_OR_CROSSES_ONLY = [[(i + j) % 2 == 0 for j in range(5)] for i in range(5)]
 
 
 def board_to_string(board):
@@ -92,15 +92,15 @@ def gen_opposite_position_pairs(
     ]
 
 
-# Pairs of positions that the chess piece at [i][j] can potentially "ganh", regardless of "colors"
+# List of pairs of positions that the chess piece at [i][j] can potentially "ganh", regardless of "colors"
 # List[List[ List[Tuple[Tuple,Tuple]] ]]
 OPPOSITE_POSITION_PAIRS = [
     [gen_opposite_position_pairs((i, j)) for j in range(5)] for i in range(5)
 ]
 
 
-def ganh(new_position, board, player) -> List[Tuple[Tuple, Tuple]]:
-    """Tra ve danh sach cac cap vi tri quan doi phuong ma neu player di vao new_position thi co the ganh."""
+def ganh(new_position, board, player) -> List[Tuple]:
+    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the ganh."""
     pairs = OPPOSITE_POSITION_PAIRS[new_position[0]][new_position[1]]
     opponent = -player
 
@@ -108,13 +108,20 @@ def ganh(new_position, board, player) -> List[Tuple[Tuple, Tuple]]:
         x0, y0 = pair[0]
         x1, y1 = pair[1]
         if board[x0][y0] == board[x1][y1] == opponent:
-            return pair
-        return None
+            return [pair[0], pair[1]]
+        return []
 
-    return [pair for pair in [cap_quan_bi_ganh(_) for _ in pairs] if pair is not None]
+    return reduce(operator.add, [cap_quan_bi_ganh(_) for _ in pairs])
 
 
-# TEST_BOARD = [-1 for i in range(8)] + [1 for i in range(8)] + [0 for i in range(9)]
+def gen_random_board() -> List[List[int]]:
+    test_board_arr = (
+        [-1 for _ in range(8)] + [1 for _ in range(8)] + [0 for _ in range(25 - 8 * 2)]
+    )
+    random.shuffle(test_board_arr)
+    return [test_board_arr[5 * i : 5 * i + 5] for i in range(5)]
+
+
 TEST_BOARD = [
     [0, 1, 0, -1, 0],
     [0, -1, 1, 1, 1],
@@ -122,6 +129,10 @@ TEST_BOARD = [
     [-1, 0, 0, 0, 1],
     [-1, 0, 0, 1, -1],
 ]
+
+
+# Used to store the board's information after "our" previous move, to adhere to an "open move"
+previous_board = None
 
 
 def move(
