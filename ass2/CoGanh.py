@@ -40,6 +40,9 @@ def generate_all_moves(position):
     ]
 
 
+NEIGHBORS_OF = [[generate_all_moves((i, j)) for j in range(5)] for i in range(5)]
+
+
 def generate_legal_moves(position, board) -> List[Tuple]:
     moves = generate_all_moves(position)
     return [(i, j) for (i, j) in moves if board[i][j] == 0]
@@ -56,6 +59,7 @@ def get_winner(board):
 
 
 def board_after_move(source, dest, board):
+    """Mutate board argument!!!"""
     x_old, y_old, x_new, y_new = source[0], source[1], dest[0], dest[1]
     board[x_old][y_old], board[x_new][y_new] = (
         board[x_new][y_new],
@@ -123,7 +127,7 @@ def infer_move(old_board, new_board):
         return None
     else:
         # We have to compare to 0 only since chess pieces that were "ganh" would have changed their color, too
-        # src position: become empty on the new board
+        # src position: became empty on the new board
         src = [pos for pos in changed_positions if new_board[pos[0]][pos[1]] == 0][0]
         # des position: was empty on the old board
         des = [pos for pos in changed_positions if old_board[pos[0]][pos[1]] == 0][0]
@@ -156,12 +160,60 @@ TEST_BOARD_2 = [
 ]
 
 
+def check_luat_mo(old_board, new_board, playing_player):
+    """If "luật mở" is executing:
+    Return the list of chess pieces which can move in the "mở" position and itself.
+    Else return [] and None.
+    -> tuple[list[tuple], tuple] | ([], None)
+    """
+    moved = infer_move(old_board, new_board)
+    if moved is not None:
+        src, des = moved
+        da_bi_ganh = [
+            (i, j)
+            for i in range(5)
+            for j in range(5)
+            if old_board[i][j] == -new_board[i][j]
+        ]
+        # Get all of our pieces which can move into the "mở" position
+        possible_pieces_to_move = [
+            pos
+            for pos in NEIGHBORS_OF[src[0]][src[1]]
+            if new_board[pos[0]][pos[1]] == playing_player
+        ]
+        if (
+            len(da_bi_ganh) == 0
+            and len(possible_pieces_to_move) > 0
+            and len(ganh(src, new_board, playing_player)) > 0
+        ):
+            return (possible_pieces_to_move, src)
+    return ([], None)
+
+
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
-previous_board = None
+previous_board = copy.deepcopy(INITIAL_BOARD)
 
 
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
     # TODO: insert something useful here
+
+    possible_pieces_to_move, mo_position = check_luat_mo(
+        old_board=previous_board, new_board=board, playing_player=player
+    )
+
+    if mo_position is not None and len(possible_pieces_to_move) > 0:
+        # TODO: Decide which one to move
+        src = possible_pieces_to_move[0]
+        des = mo_position
+    else:
+        # Dummy moves
+        src = (0, 0)
+        des = (0, 0)
+
+    new_board = board_after_move(src, des, board)
+
+    previous_board = copy.deepcopy(new_board)
+
     return None
