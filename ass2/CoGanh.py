@@ -64,10 +64,9 @@ def board_after_move(source, dest, board):
     return board
 
 
-def gen_opposite_position_pairs(
-    position: Tuple[int, int]
-) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
-    """Return a list of pairs of opposing positions around the argument."""
+def gen_opposite_position_pairs(position: Tuple[int, int]):
+    """Return a list of pairs of opposing positions around the argument.
+    -> List[Tuple[Tuple[int, int], Tuple[int, int]]]"""
     adjacent_positions = generate_all_moves(position)
     x, y = position
 
@@ -114,6 +113,23 @@ def ganh(new_position, board, player) -> List[Tuple]:
     return reduce(operator.add, [cap_quan_bi_ganh(_) for _ in pairs])
 
 
+def infer_move(old_board, new_board):
+    """Return the move which has been played, given old_board and new_board.
+    Tuple -> [Tuple, Tuple] | None"""
+    changed_positions = [
+        (i, j) for i in range(5) for j in range(5) if old_board[i][j] != new_board[i][j]
+    ]
+    if changed_positions == []:
+        return None
+    else:
+        # We have to compare to 0 only since chess pieces that were "ganh" would have changed their color, too
+        # src position: become empty on the new board
+        src = [pos for pos in changed_positions if new_board[pos[0]][pos[1]] == 0][0]
+        # des position: was empty on the old board
+        des = [pos for pos in changed_positions if old_board[pos[0]][pos[1]] == 0][0]
+        return (src, des)
+
+
 def gen_random_board() -> List[List[int]]:
     test_board_arr = (
         [-1 for _ in range(8)] + [1 for _ in range(8)] + [0 for _ in range(25 - 8 * 2)]
@@ -131,11 +147,21 @@ TEST_BOARD = [
 ]
 
 
+TEST_BOARD_2 = [
+    [0, 1, 0, -1, 0],
+    [0, -1, 1, 1, 1],
+    [1, -1, 1, -1, 1],
+    [-1, 0, 0, 1, 1],
+    [-1, 0, 0, 0, 1],
+]
+
+
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
 previous_board = None
 
 
-def move(
-    board: List[List[int]], player: int
-) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+def move(board, player):
+    # (board: List[List[int]], player: int)
+    # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
+    # TODO: insert something useful here
     return None
