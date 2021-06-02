@@ -40,11 +40,12 @@ def generate_all_moves(position):
     ]
 
 
-NEIGHBORS_OF = [[generate_all_moves((i, j)) for j in range(5)] for i in range(5)]
+# Pre-compute for faster access
+NEIGHBORS_POSITIONS = [[generate_all_moves((i, j)) for j in range(5)] for i in range(5)]
 
 
 def generate_legal_moves(position, board) -> List[Tuple]:
-    moves = generate_all_moves(position)
+    moves = NEIGHBORS_POSITIONS[position[0]][position[1]]
     return [(i, j) for (i, j) in moves if board[i][j] == 0]
 
 
@@ -71,7 +72,7 @@ def board_after_move(source, dest, board):
 def gen_opposite_position_pairs(position: Tuple[int, int]):
     """Return a list of pairs of opposing positions around the argument.
     -> List[Tuple[Tuple[int, int], Tuple[int, int]]]"""
-    adjacent_positions = generate_all_moves(position)
+    adjacent_positions = NEIGHBORS_POSITIONS[position[0]][position[1]]
     x, y = position
 
     def opposite_pair(adj_pos):
@@ -162,7 +163,7 @@ TEST_BOARD_2 = [
 
 def check_luat_mo(old_board, new_board, playing_player):
     """If "luật mở" is executing:
-    Return the list of chess pieces which can move in the "mở" position and itself.
+    Return the list of chess pieces which can move into the "mở" position and itself.
     Else return [] and None.
     -> tuple[list[tuple], tuple] | ([], None)
     """
@@ -171,14 +172,13 @@ def check_luat_mo(old_board, new_board, playing_player):
         src, des = moved
         da_bi_ganh = [
             (i, j)
-            for i in range(5)
-            for j in range(5)
-            if old_board[i][j] == -new_board[i][j]
+            for (i, j) in NEIGHBORS_POSITIONS[des[0]][des[1]]
+            if old_board[i][j] == -new_board[i][j] != 0
         ]
         # Get all of our pieces which can move into the "mở" position
         possible_pieces_to_move = [
             pos
-            for pos in NEIGHBORS_OF[src[0]][src[1]]
+            for pos in NEIGHBORS_POSITIONS[src[0]][src[1]]
             if new_board[pos[0]][pos[1]] == playing_player
         ]
         if (
