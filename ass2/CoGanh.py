@@ -167,8 +167,9 @@ def vay(old_pos, new_pos, board, player) -> List[Tuple]:
     return list(set(reduce(operator.add, surrounded_enemies_by_regions)))
 
 
-def get_immediate_reward(src, des, board, player) -> List[Tuple]:
-    """Return the list of opponent's chess pieces that current player can immediately convert."""
+def all_to_be_converted(src, des, board, player) -> List[Tuple]:
+    """Return the list of opponent's chess pieces that current PLAYER can
+    immediately convert by moving from SRC to DES."""
     return ganh(des, board, player) + vay(src, des, board, player)
 
 
@@ -253,21 +254,41 @@ def move(board, player):
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
     # TODO: insert something useful here
 
-    possible_pieces_to_move, mo_position = check_luat_mo(
+    possible_pieces_to_move, open_position = check_luat_mo(
         old_board=previous_board, new_board=board, playing_player=player
     )
 
-    if mo_position is not None and len(possible_pieces_to_move) > 0:
+    if open_position is not None and len(possible_pieces_to_move) > 0:
         # TODO: Decide which one to move
         src = possible_pieces_to_move[0]
-        des = mo_position
+        des = open_position
     else:
-        # Dummy moves
-        src = (0, 0)
-        des = (0, 0)
+
+        # list[tuple[int,int]]
+        owned_positions = [
+            (r, c) for r in range(5) for c in range(5) if board[r][c] == player
+        ]
+
+        # list[tuple[tuple,tuple]]
+        all_moves = [
+            (pos, new_pos)
+            for pos in owned_positions
+            for new_pos in generate_legal_moves(pos, board)
+        ]
+
+        # dict[tuple[tuple,tuple]: list[tuple]]
+        immediate_scores = {
+            move: all_to_be_converted(src, des, board, player)
+            for (src, des) in all_moves
+        }
+
+        # def get_immediate_score(move: Tuple[Tuple, Tuple]) -> int:
+        #     return len(immediate_scores[move])
+
+        src, des = max(all_moves, key=(lambda move: len(immediate_scores[move])))
 
     new_board = board_after_move(src, des, board)
 
     previous_board = copy.deepcopy(new_board)
 
-    return None
+    return (src, des)
