@@ -8,6 +8,8 @@ import time, copy, random
 
 from typing import List, Tuple
 
+from queue import Queue
+
 INITIAL_BOARD = [
     [1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1],
@@ -59,14 +61,18 @@ def get_winner(board):
     return 0
 
 
-def board_after_move(source, dest, board):
-    """Mutate board argument!!!"""
+def board_after_move(source, dest, board, pure=False):
+    """If pure is falsy, may mutate board, else return a new one without mutating."""
+    if pure:
+        new_board = copy.deepcopy(board)
+    else:
+        new_board = board
     x_old, y_old, x_new, y_new = source[0], source[1], dest[0], dest[1]
-    board[x_old][y_old], board[x_new][y_new] = (
-        board[x_new][y_new],
-        board[x_old][y_old],
+    new_board[x_old][y_old], new_board[x_new][y_new] = (
+        new_board[x_new][y_new],
+        new_board[x_old][y_old],
     )
-    return board
+    return new_board
 
 
 def gen_opposite_position_pairs(position: Tuple[int, int]):
@@ -118,6 +124,54 @@ def ganh(new_position, board, player) -> List[Tuple]:
     return reduce(operator.add, [cap_quan_bi_ganh(_) for _ in pairs])
 
 
+def contiguously_surrounded_pieces(initial_pos: Tuple, board) -> List[Tuple]:
+    return_value = []
+    player = board[initial_pos[0]][initial_pos[1]]
+    # Save the traveled positions to avoid repeated traversal
+    marked = [[0 for _ in range(5)] for _ in range(5)]
+    # Queue to save incoming positions
+    q = Queue(maxsize=(5 - 1) * 4)
+    q.put(initial_pos)
+    while not q.empty():
+        x, y = q.get()
+        moves = generate_legal_moves((x, y), board)
+        # The cluster of chess pieces is not "surrounded", if one them can still move
+        if len(moves) > 0:
+            return []
+        else:
+            return_value += [(x, y)]
+            marked[x][y] = player
+            unchecked_nearby_allies = [
+                (r, c)
+                for (r, c) in NEIGHBORS_POSITIONS[x][y]
+                if board[r][c] == player and marked[r][c] == 0
+            ]
+            for ally in unchecked_nearby_allies:
+                q.put(ally)
+    return return_value
+
+
+def vay(old_pos, new_pos, board, player) -> List[Tuple]:
+    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the vây/chẹt."""
+    new_board = board_after_move(old_pos, new_pos, board, pure=True)
+    x, y = new_pos
+    # Get the list of opponent's chess pieces around the new position
+    adjacent_enemies = [
+        (r, c) for (r, c) in NEIGHBORS_POSITIONS[x][y] if board[r][c] == -player
+    ]
+    # The surrounded clusters may not be a singly contiguous region
+    surrounded_enemies_by_regions = [
+        contiguously_surrounded_pieces(pos, new_board) for pos in adjacent_enemies
+    ]
+    # Return the list of "vay/chet"-ed positions, without duplication
+    return list(set(reduce(operator.add, surrounded_enemies_by_regions)))
+
+
+def get_immediate_reward(src, des, board, player) -> List[Tuple]:
+    """Return the list of opponent's chess pieces that current player can immediately convert."""
+    return ganh(des, board, player) + vay(src, des, board, player)
+
+
 def infer_move(old_board, new_board):
     """Return the move which has been played, given old_board and new_board.
     Tuple -> [Tuple, Tuple] | None"""
@@ -143,21 +197,21 @@ def gen_random_board() -> List[List[int]]:
     return [test_board_arr[5 * i : 5 * i + 5] for i in range(5)]
 
 
-TEST_BOARD = [
-    [0, 1, 0, -1, 0],
-    [0, -1, 1, 1, 1],
-    [1, -1, -1, -1, 1],
-    [-1, 0, 0, 0, 1],
-    [-1, 0, 0, 1, -1],
+TEST_BOARD_1 = [
+    [-1, 00, +1, 00, +1],
+    [00, -1, 00, 00, +1],
+    [+1, +1, -1, 00, 00],
+    [-1, -1, +1, +1, +1],
+    [-1, 00, 00, -1, -1],
 ]
 
 
 TEST_BOARD_2 = [
-    [0, 1, 0, -1, 0],
-    [0, -1, 1, 1, 1],
-    [1, -1, 1, -1, 1],
-    [-1, 0, 0, 1, 1],
-    [-1, 0, 0, 0, 1],
+    [00, 00, +1, 00, +1],
+    [-1, -1, 00, 00, +1],
+    [-1, -1, +1, 00, 00],
+    [-1, -1, +1, +1, +1],
+    [-1, +1, 00, 00, +1],
 ]
 
 
