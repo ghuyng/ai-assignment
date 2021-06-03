@@ -162,13 +162,11 @@ def try_ganh(src, des, board, player) -> List[Tuple]:
         return []
 
     converted_by_ganh = [pos for pair in pairs for pos in cap_quan_bi_ganh(pair)]
-    print(converted_by_ganh)
     new_board = board_after_move(src, des, board)
     for (r, c) in converted_by_ganh:
         new_board[r][c] = player
     # Surround after carrying
     converted_by_surrounding = get_surrounded(new_board, -player)
-    print(converted_by_surrounding)
     return converted_by_ganh + converted_by_surrounding
 
 
@@ -209,18 +207,6 @@ def get_surrounded(board, player: int) -> List[Tuple]:
                 if not free_cluster:
                     return_value += cluster
     return return_value
-
-
-get_surrounded(
-    [
-        [0, 0, 0, 1, 1],
-        [0, 1, 0, 1, 1],
-        [1, -1, 1, 1, 1],
-        [0, 1, -1, 1, 0],
-        [1, 1, 1, 0, 0],
-    ],
-    -1,
-)
 
 
 def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
@@ -377,19 +363,23 @@ def move(board, player):
 
 
 def simulate():
-    player = -1
+    player = 1
     board = deepcopy(INITIAL_BOARD)
+    turn = 0
     while get_winner(board) == 0:
         src, des = move(deepcopy(board), player)
         board = board_after_move_and_rules_application(src, des, board)
+        turn += 1
         print(
-            "Player ",
+            "Turn: ",
+            turn,
+            "Player",
             player,
-            " moves from ",
+            "moves from",
             src,
-            " to ",
+            "to",
             des,
-            ", change the board to: ",
+            ", change the board to:",
         )
         print_board(board)
         player = -player
