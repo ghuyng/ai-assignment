@@ -10,6 +10,8 @@ from typing import List, Tuple
 
 from queue import Queue
 
+from copy import deepcopy
+
 INITIAL_BOARD = [
     [1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1],
@@ -64,7 +66,7 @@ def get_winner(board):
 def board_after_move(source, dest, board, pure=False):
     """If pure is falsy, may mutate board, else return a new one without mutating."""
     if pure:
-        new_board = copy.deepcopy(board)
+        new_board = deepcopy(board)
     else:
         new_board = board
     x_old, y_old, x_new, y_new = source[0], source[1], dest[0], dest[1]
@@ -72,6 +74,16 @@ def board_after_move(source, dest, board, pure=False):
         new_board[x_new][y_new],
         new_board[x_old][y_old],
     )
+    return new_board
+
+
+def board_after_move_and_rules_application(src, des, board, pure=False):
+    """If pure is falsy, may mutate board, else return a new one without mutating."""
+    player = board[src[0]][src[1]]
+    converting = all_to_be_converted(src, des, board, player)
+    new_board = board_after_move(src, des, board, pure)
+    for (r, c) in converting:
+        new_board[r][c] = player
     return new_board
 
 
@@ -109,8 +121,24 @@ OPPOSITE_POSITION_PAIRS = [
 ]
 
 
-def ganh(new_position, board, player) -> List[Tuple]:
-    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the ganh."""
+def try_ganh(new_position, board, player) -> List[Tuple]:
+    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the ganh.
+    board: before executing the move"""
+    # TODO: recursive, for example:
+    # Player  1  move from  (2, 2)  to  (1, 1) , change the board to:
+    # -1       1       -1      0       0
+    # 0        1       -1      -1      1
+    # 0        1       0       1       1
+    # 0        -1      0       1       1
+    # 0        -1      -1      0       1
+    # Player  -1  move from  (3, 1)  to  (2, 2) , change the board to:
+    # -1       1       -1      0       0
+    # 0        -1      -1      -1      1
+    # 0        -1      -1      -1      1
+    # 0        0       0       -1      1
+    # 0        -1      -1      0       1
+    # 1 at (0,1) should be converted
+
     pairs = OPPOSITE_POSITION_PAIRS[new_position[0]][new_position[1]]
     opponent = -player
 
@@ -121,7 +149,7 @@ def ganh(new_position, board, player) -> List[Tuple]:
             return [pair[0], pair[1]]
         return []
 
-    return reduce(operator.add, [cap_quan_bi_ganh(_) for _ in pairs])
+    return [pos for pair in pairs for pos in cap_quan_bi_ganh(pair)]
 
 
 def contiguously_surrounded_pieces(initial_pos: Tuple, board) -> List[Tuple]:
@@ -151,8 +179,9 @@ def contiguously_surrounded_pieces(initial_pos: Tuple, board) -> List[Tuple]:
     return return_value
 
 
-def vay(old_pos, new_pos, board, player) -> List[Tuple]:
-    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the vây/chẹt."""
+def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
+    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the vây/chẹt.
+    board: before executing the move"""
     new_board = board_after_move(old_pos, new_pos, board, pure=True)
     x, y = new_pos
     # Get the list of opponent's chess pieces around the new position
@@ -164,13 +193,13 @@ def vay(old_pos, new_pos, board, player) -> List[Tuple]:
         contiguously_surrounded_pieces(pos, new_board) for pos in adjacent_enemies
     ]
     # Return the list of "vay/chet"-ed positions, without duplication
-    return list(set(reduce(operator.add, surrounded_enemies_by_regions)))
+    return list(set(reduce(operator.add, surrounded_enemies_by_regions, [])))
 
 
 def all_to_be_converted(src, des, board, player) -> List[Tuple]:
     """Return the list of opponent's chess pieces that current PLAYER can
     immediately convert by moving from SRC to DES."""
-    return ganh(des, board, player) + vay(src, des, board, player)
+    return try_ganh(des, board, player) + try_vay(src, des, board, player)
 
 
 def infer_move(old_board, new_board):
@@ -225,10 +254,12 @@ def check_luat_mo(old_board, new_board, playing_player):
     moved = infer_move(old_board, new_board)
     if moved is not None:
         src, des = moved
-        da_bi_ganh = [
+        # The list of positions which are converted by the opponent's previous move
+        da_bi_an = [
             (i, j)
-            for (i, j) in NEIGHBORS_POSITIONS[des[0]][des[1]]
-            if old_board[i][j] == -new_board[i][j] != 0
+            for i in range(5)
+            for j in range(5)
+            if old_board[i][j] == playing_player and new_board[i][j] == -playing_player
         ]
         # Get all of our pieces which can move into the "mở" position
         possible_pieces_to_move = [
@@ -237,16 +268,17 @@ def check_luat_mo(old_board, new_board, playing_player):
             if new_board[pos[0]][pos[1]] == playing_player
         ]
         if (
-            len(da_bi_ganh) == 0
+            len(da_bi_an) == 0
             and len(possible_pieces_to_move) > 0
-            and len(ganh(src, new_board, playing_player)) > 0
+            and len(try_ganh(src, new_board, playing_player)) > 0
         ):
             return (possible_pieces_to_move, src)
     return ([], None)
 
 
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
-previous_board = copy.deepcopy(INITIAL_BOARD)
+# Store 2 boards, to simulate 2 players playing with each other
+previous_boards = {-1: deepcopy(INITIAL_BOARD), 1: deepcopy(INITIAL_BOARD)}
 
 
 def move(board, player):
@@ -254,8 +286,10 @@ def move(board, player):
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
     # TODO: insert something useful here
 
+    global previous_boards
+
     possible_pieces_to_move, open_position = check_luat_mo(
-        old_board=previous_board, new_board=board, playing_player=player
+        old_board=previous_boards[player], new_board=board, playing_player=player
     )
 
     if open_position is not None and len(possible_pieces_to_move) > 0:
@@ -278,17 +312,46 @@ def move(board, player):
 
         # dict[tuple[tuple,tuple]: list[tuple]]
         immediate_scores = {
-            move: all_to_be_converted(src, des, board, player)
+            (src, des): all_to_be_converted(src, des, board, player)
             for (src, des) in all_moves
         }
 
-        # def get_immediate_score(move: Tuple[Tuple, Tuple]) -> int:
-        #     return len(immediate_scores[move])
+        def get_immediate_score(move):
+            return len(immediate_scores[move])
 
-        src, des = max(all_moves, key=(lambda move: len(immediate_scores[move])))
+        max_immediate_score = max(map(get_immediate_score, all_moves))
+        src, des = random.choice(
+            [
+                move
+                for move in all_moves
+                if get_immediate_score(move) == max_immediate_score
+            ]
+        )
 
-    new_board = board_after_move(src, des, board)
+    new_board = board_after_move_and_rules_application(src, des, board)
 
-    previous_board = copy.deepcopy(new_board)
+    previous_boards[player] = deepcopy(new_board)
 
     return (src, des)
+
+
+def simulate():
+    player = 1
+    board = deepcopy(INITIAL_BOARD)
+    while get_winner(board) == 0:
+        src, des = move(deepcopy(board), player)
+        board = board_after_move_and_rules_application(src, des, board)
+        print(
+            "Player ",
+            player,
+            " move from ",
+            src,
+            " to ",
+            des,
+            ", change the board to: ",
+        )
+        print(board_to_string(board))
+        player = -player
+
+
+# simulate()
