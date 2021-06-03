@@ -309,7 +309,6 @@ previous_boards = {-1: deepcopy(INITIAL_BOARD), 1: deepcopy(INITIAL_BOARD)}
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
-    # TODO: insert something useful here
 
     global previous_boards
 
@@ -318,12 +317,10 @@ def move(board, player):
     )
 
     if open_position is not None and len(possible_pieces_to_move) > 0:
-        # TODO: Decide which one to move
-        src = possible_pieces_to_move[0]
-        des = open_position
+        src, des = choose_move(
+            board, player, [(pos, open_position) for pos in possible_pieces_to_move]
+        )
     else:
-
-        # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
 
         # list[tuple[int,int]]
         owned_positions = [
@@ -336,29 +333,30 @@ def move(board, player):
             for pos in owned_positions
             for new_pos in generate_legal_moves(pos, board)
         ]
-
-        # dict[tuple[tuple,tuple]: list[tuple]]
-        immediate_scores = {
-            (src, des): all_to_be_converted(src, des, board, player)
-            for (src, des) in all_moves
-        }
-
-        def get_immediate_score(move):
-            return len(immediate_scores[move])
-
-        max_immediate_score = max(map(get_immediate_score, all_moves))
-        src, des = random.choice(
-            [
-                move
-                for move in all_moves
-                if get_immediate_score(move) == max_immediate_score
-            ]
-        )
+        src, des = choose_move(board, player, all_moves)
 
     new_board = board_after_move_and_rules_application(src, des, board)
 
     previous_boards[player] = deepcopy(new_board)
 
+    return (src, des)
+
+
+def choose_move(board, player, moves: list[Tuple[Tuple, Tuple]]) -> Tuple[Tuple, Tuple]:
+    """TODO: Implement this!!!"""
+    # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
+    # dict[tuple[tuple,tuple]: list[tuple]]
+    immediate_scores = {
+        (src, des): all_to_be_converted(src, des, board, player) for (src, des) in moves
+    }
+
+    def get_immediate_score(move):
+        return len(immediate_scores[move])
+
+    max_immediate_score = max(map(get_immediate_score, moves))
+    src, des = random.choice(
+        [move for move in moves if get_immediate_score(move) == max_immediate_score]
+    )
     return (src, des)
 
 
