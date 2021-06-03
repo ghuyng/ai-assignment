@@ -136,20 +136,6 @@ def get_possible_couples_to_carry(pos, board, player):
 def try_ganh(src, des, board, player) -> List[Tuple]:
     """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the ganh.
     board: before executing the move"""
-    # TODO: recursive, for example:
-    # Player  1  move from  (2, 2)  to  (1, 1) , change the board to:
-    # -1       1       -1      0       0
-    # 0        1       -1      -1      1
-    # 0        1       0       1       1
-    # 0        -1      0       1       1
-    # 0        -1      -1      0       1
-    # Player  -1  move from  (3, 1)  to  (2, 2) , change the board to:
-    # -1       1       -1      0       0
-    # 0        -1      -1      -1      1
-    # 0        -1      -1      -1      1
-    # 0        0       0       -1      1
-    # 0        -1      -1      0       1
-    # 1 at (0,1) should be converted
 
     pairs = OPPOSITE_POSITION_PAIRS[des[0]][des[1]]
     opponent = -player
