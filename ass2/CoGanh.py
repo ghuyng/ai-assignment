@@ -210,7 +210,10 @@ def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
 def all_to_be_converted(src, des, board, player) -> List[Tuple]:
     """Return the list of opponent's chess pieces that current PLAYER can
     immediately convert by moving from SRC to DES."""
-    return try_ganh(src, des, board, player) + try_vay(src, des, board, player)
+    # Avoid duplication
+    return list(
+        set(try_ganh(src, des, board, player) + try_vay(src, des, board, player))
+    )
 
 
 def infer_move(old_board, new_board):
