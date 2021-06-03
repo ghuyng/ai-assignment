@@ -8,7 +8,7 @@ import time, copy, random
 
 from typing import List, Tuple
 
-from queue import Queue
+# from queue import Queue
 
 from copy import deepcopy
 
@@ -29,6 +29,10 @@ def board_to_string(board):
         operator.add,
         [("\t " if i > 0 else "\n") + str(row[i]) for row in board for i in range(5)],
     )
+
+
+def print_board(b):
+    print(board_to_string(b))
 
 
 def generate_all_moves(position):
@@ -68,10 +72,8 @@ def board_after_move(source, dest, board):
     Pure function."""
     new_board = deepcopy(board)
     x_old, y_old, x_new, y_new = source[0], source[1], dest[0], dest[1]
-    new_board[x_old][y_old], new_board[x_new][y_new] = (
-        new_board[x_new][y_new],
-        new_board[x_old][y_old],
-    )
+    new_board[x_new][y_new] = new_board[x_old][y_old]
+    new_board[x_old][y_old] = 0
     return new_board
 
 
@@ -120,7 +122,18 @@ OPPOSITE_POSITION_PAIRS = [
 ]
 
 
-def try_ganh(new_position, board, player) -> List[Tuple]:
+def get_possible_couples_to_carry(pos, board, player):
+    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the ganh.
+    board: before executing the move"""
+    pairs = OPPOSITE_POSITION_PAIRS[pos[0]][pos[1]]
+    return [
+        ((r0, c0), (r1, c1))
+        for ((r0, c0), (r1, c1)) in pairs
+        if board[r0][c0] == board[r1][c1] == -player
+    ]
+
+
+def try_ganh(src, des, board, player) -> List[Tuple]:
     """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the ganh.
     board: before executing the move"""
     # TODO: recursive, for example:
@@ -138,7 +151,7 @@ def try_ganh(new_position, board, player) -> List[Tuple]:
     # 0        -1      -1      0       1
     # 1 at (0,1) should be converted
 
-    pairs = OPPOSITE_POSITION_PAIRS[new_position[0]][new_position[1]]
+    pairs = OPPOSITE_POSITION_PAIRS[des[0]][des[1]]
     opponent = -player
 
     def cap_quan_bi_ganh(pair):
@@ -148,34 +161,66 @@ def try_ganh(new_position, board, player) -> List[Tuple]:
             return [pair[0], pair[1]]
         return []
 
-    return [pos for pair in pairs for pos in cap_quan_bi_ganh(pair)]
+    converted_by_ganh = [pos for pair in pairs for pos in cap_quan_bi_ganh(pair)]
+    print(converted_by_ganh)
+    new_board = board_after_move(src, des, board)
+    for (r, c) in converted_by_ganh:
+        new_board[r][c] = player
+    # Surround after carrying
+    converted_by_surrounding = get_surrounded(new_board, -player)
+    print(converted_by_surrounding)
+    return converted_by_ganh + converted_by_surrounding
 
 
-def contiguously_surrounded_pieces(initial_pos: Tuple, board) -> List[Tuple]:
+def get_surrounded(board, player: int) -> List[Tuple]:
     return_value = []
-    player = board[initial_pos[0]][initial_pos[1]]
-    # Save the traveled positions to avoid repeated traversal
-    marked = [[0 for _ in range(5)] for _ in range(5)]
-    # Queue to save incoming positions
-    q = Queue(maxsize=(5 - 1) * 4)
-    q.put(initial_pos)
-    while not q.empty():
-        x, y = q.get()
-        moves = generate_legal_moves((x, y), board)
-        # The cluster of chess pieces is not "surrounded", if one them can still move
-        if len(moves) > 0:
-            return []
-        else:
-            return_value += [(x, y)]
-            marked[x][y] = player
-            unchecked_nearby_allies = [
-                (r, c)
-                for (r, c) in NEIGHBORS_POSITIONS[x][y]
-                if board[r][c] == player and marked[r][c] == 0
-            ]
-            for ally in unchecked_nearby_allies:
-                q.put(ally)
+    # Save the visited positions to avoid repeated traversal
+    marked = [[False for _ in range(5)] for _ in range(5)]
+    # A stack for flood filling algorithm, initially filled with owned positions
+    # A contiguous cluster of chess pieces that are surrounded unless one of them can move
+    # Whether current cluster is not surrounded
+    for r in range(5):
+        for c in range(5):
+            if board[r][c] == player:
+                stk = [(r, c)]
+                cluster = []
+                free_cluster = False
+                while len(stk) > 0:
+                    cluster.append(stk.pop())
+                    x, y = cluster[-1]
+                    # If the position has already been processed, ignore it
+                    if not marked[x][y]:
+                        marked[x][y] = True
+                        moves = generate_legal_moves((x, y), board)
+                        # If a piece in the current cluster can still move, mark the cluster as free
+                        if len(moves) > 0:
+                            free_cluster = True
+                        cluster += [(x, y)]
+                        unchecked_nearby_allies = [
+                            (r, c)
+                            for (r, c) in NEIGHBORS_POSITIONS[x][y]
+                            if board[r][c] == player and marked[r][c] == False
+                        ]
+                        # If there are some chess pieces under the same owner, process them
+                        if len(unchecked_nearby_allies) > 0:
+                            for ally in unchecked_nearby_allies:
+                                cluster.append(ally)
+                    # Add to the list of surrounded chess pieces
+                if not free_cluster:
+                    return_value += cluster
     return return_value
+
+
+get_surrounded(
+    [
+        [0, 0, 0, 1, 1],
+        [0, 1, 0, 1, 1],
+        [1, -1, 1, 1, 1],
+        [0, 1, -1, 1, 0],
+        [1, 1, 1, 0, 0],
+    ],
+    -1,
+)
 
 
 def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
@@ -184,21 +229,16 @@ def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
     new_board = board_after_move(old_pos, new_pos, board)
     x, y = new_pos
     # Get the list of opponent's chess pieces around the new position
-    adjacent_enemies = [
-        (r, c) for (r, c) in NEIGHBORS_POSITIONS[x][y] if board[r][c] == -player
-    ]
-    # The surrounded clusters may not be a singly contiguous region
-    surrounded_enemies_by_regions = [
-        contiguously_surrounded_pieces(pos, new_board) for pos in adjacent_enemies
-    ]
-    # Return the list of "vay/chet"-ed positions, without duplication
-    return list(set(reduce(operator.add, surrounded_enemies_by_regions, [])))
+    # adjacent_enemies = [
+    #     (r, c) for (r, c) in NEIGHBORS_POSITIONS[x][y] if board[r][c] == -player
+    # ]
+    return get_surrounded(new_board, -player)
 
 
 def all_to_be_converted(src, des, board, player) -> List[Tuple]:
     """Return the list of opponent's chess pieces that current PLAYER can
     immediately convert by moving from SRC to DES."""
-    return try_ganh(des, board, player) + try_vay(src, des, board, player)
+    return try_ganh(src, des, board, player) + try_vay(src, des, board, player)
 
 
 def infer_move(old_board, new_board):
@@ -269,7 +309,7 @@ def check_luat_mo(old_board, new_board, playing_player):
         if (
             len(da_bi_an) == 0
             and len(possible_pieces_to_move) > 0
-            and len(try_ganh(src, new_board, playing_player)) > 0
+            and len(get_possible_couples_to_carry(src, new_board, playing_player)) > 0
         ):
             return (possible_pieces_to_move, src)
     return ([], None)
@@ -351,7 +391,7 @@ def simulate():
             des,
             ", change the board to: ",
         )
-        print(board_to_string(board))
+        print_board(board)
         player = -player
 
 
