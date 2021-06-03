@@ -63,12 +63,10 @@ def get_winner(board):
     return 0
 
 
-def board_after_move(source, dest, board, pure=False):
-    """If pure is falsy, may mutate board, else return a new one without mutating."""
-    if pure:
-        new_board = deepcopy(board)
-    else:
-        new_board = board
+def board_after_move(source, dest, board):
+    """Return board after moving from source to dest without applying any converting rules.
+    Pure function."""
+    new_board = deepcopy(board)
     x_old, y_old, x_new, y_new = source[0], source[1], dest[0], dest[1]
     new_board[x_old][y_old], new_board[x_new][y_new] = (
         new_board[x_new][y_new],
@@ -77,11 +75,12 @@ def board_after_move(source, dest, board, pure=False):
     return new_board
 
 
-def board_after_move_and_rules_application(src, des, board, pure=False):
-    """If pure is falsy, may mutate board, else return a new one without mutating."""
+def board_after_move_and_rules_application(src, des, board):
+    """Return board after moving from src to des and apply converting rules.
+    Pure function."""
     player = board[src[0]][src[1]]
     converting = all_to_be_converted(src, des, board, player)
-    new_board = board_after_move(src, des, board, pure)
+    new_board = board_after_move(src, des, board)
     for (r, c) in converting:
         new_board[r][c] = player
     return new_board
@@ -182,7 +181,7 @@ def contiguously_surrounded_pieces(initial_pos: Tuple, board) -> List[Tuple]:
 def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
     """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the vây/chẹt.
     board: before executing the move"""
-    new_board = board_after_move(old_pos, new_pos, board, pure=True)
+    new_board = board_after_move(old_pos, new_pos, board)
     x, y = new_pos
     # Get the list of opponent's chess pieces around the new position
     adjacent_enemies = [
@@ -298,6 +297,8 @@ def move(board, player):
         des = open_position
     else:
 
+        # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
+
         # list[tuple[int,int]]
         owned_positions = [
             (r, c) for r in range(5) for c in range(5) if board[r][c] == player
@@ -336,7 +337,7 @@ def move(board, player):
 
 
 def simulate():
-    player = 1
+    player = -1
     board = deepcopy(INITIAL_BOARD)
     while get_winner(board) == 0:
         src, des = move(deepcopy(board), player)
@@ -344,7 +345,7 @@ def simulate():
         print(
             "Player ",
             player,
-            " move from ",
+            " moves from ",
             src,
             " to ",
             des,
