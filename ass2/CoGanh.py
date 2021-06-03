@@ -176,35 +176,35 @@ def get_surrounded(board, player: int) -> List[Tuple]:
     return_value = []
     # Save the visited positions to avoid repeated traversal
     marked = [[False for _ in range(5)] for _ in range(5)]
-    # A stack for flood filling algorithm, initially filled with owned positions
-    # A contiguous cluster of chess pieces that are surrounded unless one of them can move
-    # Whether current cluster is not surrounded
     for r in range(5):
         for c in range(5):
             if board[r][c] == player:
+                # A stack for flood filling algorithm
                 stk = [(r, c)]
+                # A contiguous cluster of chess pieces that are surrounded unless one of them can move
                 cluster = []
+                # Whether current cluster is not surrounded
                 free_cluster = False
                 while len(stk) > 0:
-                    cluster.append(stk.pop())
-                    x, y = cluster[-1]
+                    x, y = stk.pop()
                     # If the position has already been processed, ignore it
                     if not marked[x][y]:
+                        # Don't append to the cluster before checking marked,
+                        # because the position may have already been marked, and
+                        # belongs to a free cluster
+                        cluster += [(x, y)]
                         marked[x][y] = True
                         moves = generate_legal_moves((x, y), board)
                         # If a piece in the current cluster can still move, mark the cluster as free
                         if len(moves) > 0:
                             free_cluster = True
-                        cluster += [(x, y)]
-                        unchecked_nearby_allies = [
+                        # Process nearby unchecked allies
+                        for ally in [
                             (r, c)
                             for (r, c) in NEIGHBORS_POSITIONS[x][y]
                             if board[r][c] == player and marked[r][c] == False
-                        ]
-                        # If there are some chess pieces under the same owner, process them
-                        if len(unchecked_nearby_allies) > 0:
-                            for ally in unchecked_nearby_allies:
-                                cluster.append(ally)
+                        ]:
+                            stk.append(ally)
                     # Add to the list of surrounded chess pieces
                 if not free_cluster:
                     return_value += cluster
