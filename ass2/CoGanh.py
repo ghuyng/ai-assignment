@@ -8,8 +8,6 @@ import time, copy, random
 
 from typing import List, Tuple
 
-# from queue import Queue
-
 from copy import deepcopy
 
 INITIAL_BOARD = [
@@ -19,9 +17,6 @@ INITIAL_BOARD = [
     [-1, 0, 0, 0, -1],
     [-1, -1, -1, -1, -1],
 ]
-
-# Whether the chess piece at [i][j] is able to travel diagonally
-DIAGONAL_OR_CROSSES_ONLY = [[(i + j) % 2 == 0 for j in range(5)] for i in range(5)]
 
 
 def board_to_string(board):
@@ -200,10 +195,6 @@ def try_vay(old_pos, new_pos, board, player) -> List[Tuple]:
     board: before executing the move"""
     new_board = board_after_move(old_pos, new_pos, board)
     x, y = new_pos
-    # Get the list of opponent's chess pieces around the new position
-    # adjacent_enemies = [
-    #     (r, c) for (r, c) in NEIGHBORS_POSITIONS[x][y] if board[r][c] == -player
-    # ]
     return get_surrounded(new_board, -player)
 
 
@@ -239,24 +230,6 @@ def gen_random_board() -> List[List[int]]:
     )
     random.shuffle(test_board_arr)
     return [test_board_arr[5 * i : 5 * i + 5] for i in range(5)]
-
-
-TEST_BOARD_1 = [
-    [-1, 00, +1, 00, +1],
-    [00, -1, 00, 00, +1],
-    [+1, +1, -1, 00, 00],
-    [-1, -1, +1, +1, +1],
-    [-1, 00, 00, -1, -1],
-]
-
-
-TEST_BOARD_2 = [
-    [00, 00, +1, 00, +1],
-    [-1, -1, 00, 00, +1],
-    [-1, -1, +1, 00, 00],
-    [-1, -1, +1, +1, +1],
-    [-1, +1, 00, 00, +1],
-]
 
 
 def check_luat_mo(old_board, new_board, playing_player):
@@ -331,7 +304,7 @@ def move(board, player):
     return (src, des)
 
 
-def choose_move(board, player, moves: list[Tuple[Tuple, Tuple]]) -> Tuple[Tuple, Tuple]:
+def choose_move(board, player, moves: List[Tuple[Tuple, Tuple]]) -> Tuple[Tuple, Tuple]:
     """TODO: Implement this!!!"""
     # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
     # dict[tuple[tuple,tuple]: list[tuple]]
