@@ -231,7 +231,7 @@ def gen_random_board() -> List[List[int]]:
     return [test_board_arr[5 * i : 5 * i + 5] for i in range(5)]
 
 
-def check_open_rule(old_board, new_board, playing_player):
+def check_open_rule(old_board, new_board, player):
     """If "luật mở" is executing:
     Return the list of chess pieces which can move into the "mở" position and itself.
     Else return [] and None.
@@ -245,18 +245,18 @@ def check_open_rule(old_board, new_board, playing_player):
             (i, j)
             for i in range(5)
             for j in range(5)
-            if old_board[i][j] == playing_player and new_board[i][j] == -playing_player
+            if old_board[i][j] == player and new_board[i][j] == -player
         ]
         # Get all of our pieces which can move into the "mở" position
         possible_pieces_to_move = [
             pos
             for pos in NEIGHBORS_POSITIONS[src[0]][src[1]]
-            if new_board[pos[0]][pos[1]] == playing_player
+            if new_board[pos[0]][pos[1]] == player
         ]
         if (
             len(captured) == 0
             and len(possible_pieces_to_move) > 0
-            and len(get_possible_pairs_to_carry(src, new_board, playing_player)) > 0
+            and len(get_possible_pairs_to_carry(src, new_board, player)) > 0
         ):
             return (possible_pieces_to_move, src)
     return ([], None)
@@ -271,9 +271,8 @@ def get_all_legal_moves(
     old_board, current_board, player: int
 ) -> List[Tuple[Tuple, Tuple]]:
     """Return the list of all possible moves according to rules."""
-    global previous_boards
     possible_pieces_to_move, open_position = check_open_rule(
-        old_board=old_board, new_board=current_board, playing_player=player
+        old_board=old_board, new_board=current_board, player=player
     )
     if open_position and len(possible_pieces_to_move) > 0:
         return [(pos, open_position) for pos in possible_pieces_to_move]
