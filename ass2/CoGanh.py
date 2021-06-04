@@ -330,15 +330,6 @@ def simulate():
         board = board_after_move_and_capturing(src, des, board)
         turn += 1
         print(
-            "Turn:",
-            turn,
-            "Player",
-            player,
-            "moves from",
-            src,
-            "to",
-            des,
-            ", change the board to:",
+            f"Turn {turn}: {player} moves from {src} to {des}, the board becomes {board_to_string(board)}"
         )
-        print_board(board)
         player = -player
