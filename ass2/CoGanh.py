@@ -113,7 +113,7 @@ OPPOSITE_POSITION_PAIRS = [
 
 
 def get_possible_pairs_to_carry(pos, board, player):
-    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the gánh.
+    """Return the list of opponent's pieces that the PLAYER can gánh & vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
     pairs = OPPOSITE_POSITION_PAIRS[pos[0]][pos[1]]
     return [
@@ -124,7 +124,7 @@ def get_possible_pairs_to_carry(pos, board, player):
 
 
 def try_carrying(src, des, board, player) -> List[Tuple]:
-    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the gánh.
+    """Return the list of opponent's pieces that the PLAYER can gánh & vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
 
     pairs = OPPOSITE_POSITION_PAIRS[des[0]][des[1]]
@@ -137,13 +137,15 @@ def try_carrying(src, des, board, player) -> List[Tuple]:
             return [pair[0], pair[1]]
         return []
 
-    captured_by_ganh = [pos for pair in pairs for pos in get_pairs_to_be_captured(pair)]
+    captured_by_carrying = [
+        pos for pair in pairs for pos in get_pairs_to_be_captured(pair)
+    ]
     new_board = board_after_move_only(src, des, board)
-    for (r, c) in captured_by_ganh:
+    for (r, c) in captured_by_carrying:
         new_board[r][c] = player
     # Surround after carrying
     captured_by_surrounding = get_surrounded(new_board, -player)
-    return captured_by_ganh + captured_by_surrounding
+    return captured_by_carrying + captured_by_surrounding
 
 
 def get_surrounded(board, player: int) -> List[Tuple]:
@@ -163,11 +165,10 @@ def get_surrounded(board, player: int) -> List[Tuple]:
                 free_cluster = False
                 while len(stk) > 0:
                     x, y = stk.pop()
-                    # If the position has already been processed, ignore it
                     if not marked[x][y]:
-                        # Don't append to the cluster before checking marked,
-                        # because the position may have already been marked, and
-                        # belongs to a free cluster
+                        # Don't append to the cluster before checking marked:
+                        # the position may have already been marked and belongs
+                        # to a free cluster
                         cluster += [(x, y)]
                         marked[x][y] = True
                         moves = generate_moves_to_empty_positions((x, y), board)
@@ -175,20 +176,19 @@ def get_surrounded(board, player: int) -> List[Tuple]:
                         if len(moves) > 0:
                             free_cluster = True
                         # Process nearby unchecked allies
-                        for ally in [
+                        stk += [
                             (r, c)
                             for (r, c) in NEIGHBORS_POSITIONS[x][y]
                             if board[r][c] == player and marked[r][c] == False
-                        ]:
-                            stk.append(ally)
+                        ]
                     # Add to the list of surrounded chess pieces
                 if not free_cluster:
                     return_value += cluster
     return return_value
 
 
-def try_surrouding(old_pos, new_pos, board, player) -> List[Tuple]:
-    """Tra ve danh sach cac vi tri quan doi phuong ma neu player di vao new_position thi co the vây/chẹt.
+def try_surrounding(old_pos, new_pos, board, player) -> List[Tuple]:
+    """Return the list of opponent's pieces that the PLAYER can vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
     new_board = board_after_move_only(old_pos, new_pos, board)
     x, y = new_pos
@@ -202,7 +202,7 @@ def all_to_be_captured(src, des, board, player) -> List[Tuple]:
     return list(
         set(
             try_carrying(src, des, board, player)
-            + try_surrouding(src, des, board, player)
+            + try_surrounding(src, des, board, player)
         )
     )
 
@@ -216,7 +216,6 @@ def infer_move(old_board, new_board):
     if changed_positions == []:
         return None
     else:
-        # We have to compare to 0 only since chess pieces that were captured would have changed their color, too
         # src position: became empty on the new board
         src = [pos for pos in changed_positions if new_board[pos[0]][pos[1]] == 0][0]
         # des position: was empty on the old board
@@ -278,7 +277,7 @@ def move(board, player):
         old_board=previous_boards[player], new_board=board, playing_player=player
     )
 
-    if open_position is not None and len(possible_pieces_to_move) > 0:
+    if open_position and len(possible_pieces_to_move) > 0:
         src, des = choose_move(
             board, player, [(pos, open_position) for pos in possible_pieces_to_move]
         )
@@ -343,6 +342,3 @@ def simulate():
         )
         print_board(board)
         player = -player
-
-
-# simulate()
