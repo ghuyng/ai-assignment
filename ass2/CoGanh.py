@@ -10,6 +10,9 @@ from typing import List, Tuple
 
 from copy import deepcopy
 
+import math
+from math import log
+
 INITIAL_BOARD = [
     [1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1],
@@ -289,22 +292,11 @@ def get_all_legal_moves(
         ]
 
 
-def move(board, player):
-    # (board: List[List[int]], player: int)
-    # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
-    global previous_boards
-    src, des = choose_move(
-        board, player, get_all_legal_moves(previous_boards[player], board, player)
-    )
-    new_board = board_after_move_and_capturing(src, des, board)
-    previous_boards[player] = deepcopy(new_board)
-    return (src, des)
-
-
-def choose_move(board, player, moves: List[Tuple[Tuple, Tuple]]) -> Tuple[Tuple, Tuple]:
-    """TODO: Implement this!!!"""
+def choose_move_alg0(board, player) -> Tuple[Tuple, Tuple]:
     # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
     # dict[tuple[tuple,tuple]: list[tuple]]
+    global previous_boards
+    moves = get_all_legal_moves(previous_boards[player], board, player)
     immediate_scores = {
         (src, des): all_to_be_captured(src, des, board, player) for (src, des) in moves
     }
@@ -319,15 +311,37 @@ def choose_move(board, player, moves: List[Tuple[Tuple, Tuple]]) -> Tuple[Tuple,
     return (src, des)
 
 
+def move(board, player):
+    # (board: List[List[int]], player: int)
+    # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
+
+    src, des = choose_move_alg1(board, player)
+    new_board = board_after_move_and_capturing(src, des, board)
+    previous_boards[player] = deepcopy(new_board)
+
+    return (src, des)
+
+
 def simulate():
     player = 1
     board = deepcopy(INITIAL_BOARD)
     turn = 0
     while get_winner(board) == 0:
-        src, des = move(deepcopy(board), player)
+
+        if player == -1:
+            src, des = choose_move_alg0(board, player)
+        else:
+            src, des = choose_move_alg1(deepcopy(board), player)
+        previous_boards[player] = deepcopy(board)
+
         board = board_after_move_and_capturing(src, des, board)
         turn += 1
         print(
             f"Turn {turn}: {player} moves from {src} to {des}, the board becomes {board_to_string(board)}"
         )
         player = -player
+
+
+def choose_move_alg1(board, player) -> Tuple[Tuple, Tuple]:
+    # TODO: Implement this!
+    return choose_move_alg0(board, player)
