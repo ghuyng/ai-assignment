@@ -267,24 +267,26 @@ def check_open_rule(old_board, new_board, playing_player):
 previous_boards = {i: deepcopy(INITIAL_BOARD) for i in [-1, 1]}
 
 
-def get_all_legal_moves(board, player: int) -> List[Tuple[Tuple, Tuple]]:
+def get_all_legal_moves(
+    old_board, current_board, player: int
+) -> List[Tuple[Tuple, Tuple]]:
     """Return the list of all possible moves according to rules."""
     global previous_boards
     possible_pieces_to_move, open_position = check_open_rule(
-        old_board=previous_boards[player], new_board=board, playing_player=player
+        old_board=old_board, new_board=current_board, playing_player=player
     )
     if open_position and len(possible_pieces_to_move) > 0:
         return [(pos, open_position) for pos in possible_pieces_to_move]
     else:
         # list[tuple[int,int]]
         owned_positions = [
-            (r, c) for r in range(5) for c in range(5) if board[r][c] == player
+            (r, c) for r in range(5) for c in range(5) if current_board[r][c] == player
         ]
         # list[tuple[tuple,tuple]]
         return [
             (pos, new_pos)
             for pos in owned_positions
-            for new_pos in get_empty_neighbors(pos, board)
+            for new_pos in get_empty_neighbors(pos, current_board)
         ]
 
 
@@ -292,7 +294,9 @@ def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
     global previous_boards
-    src, des = choose_move(board, player, get_all_legal_moves(board, player))
+    src, des = choose_move(
+        board, player, get_all_legal_moves(previous_boards[player], board, player)
+    )
     new_board = board_after_move_and_capturing(src, des, board)
     previous_boards[player] = deepcopy(new_board)
     return (src, des)
