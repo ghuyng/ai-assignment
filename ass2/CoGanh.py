@@ -32,7 +32,7 @@ def print_board(b):
     print(board_to_string(b))
 
 
-def generate_neighbor_positions(position):
+def _generate_neighbor_positions(position):
     can_go_in_8_directions = (position[0] + position[1]) % 2 == 0
     unbounded_moves = [
         (position[0] + i, position[1] + j)
@@ -47,11 +47,11 @@ def generate_neighbor_positions(position):
 
 # Pre-compute for faster access
 NEIGHBORS_POSITIONS = [
-    [generate_neighbor_positions((i, j)) for j in range(5)] for i in range(5)
+    [_generate_neighbor_positions((i, j)) for j in range(5)] for i in range(5)
 ]
 
 
-def get_empty_neighbors(position, board) -> List[Tuple]:
+def _get_empty_neighbors(position, board) -> List[Tuple]:
     moves = NEIGHBORS_POSITIONS[position[0]][position[1]]
     return [(i, j) for (i, j) in moves if board[i][j] == 0]
 
@@ -66,7 +66,7 @@ def get_winner(board) -> int:
     return 0
 
 
-def board_after_move_only(source, dest, board):
+def _board_after_move_only(source, dest, board):
     """Return board after moving from source to dest without applying any capturing rules.
     Pure function."""
     new_board = deepcopy(board)
@@ -81,13 +81,13 @@ def board_after_move_and_capturing(src, des, board):
     Pure function."""
     player = board[src[0]][src[1]]
     capturing = all_to_be_captured(src, des, board, player)
-    new_board = board_after_move_only(src, des, board)
+    new_board = _board_after_move_only(src, des, board)
     for (r, c) in capturing:
         new_board[r][c] = player
     return new_board
 
 
-def gen_opposite_position_pairs(position: Tuple[int, int]):
+def _gen_opposite_position_pairs(position: Tuple[int, int]):
     """Return a list of pairs of opposing positions around the argument.
     -> List[Tuple[Tuple[int, int], Tuple[int, int]]]"""
     adjacent_positions = NEIGHBORS_POSITIONS[position[0]][position[1]]
@@ -109,15 +109,15 @@ def gen_opposite_position_pairs(position: Tuple[int, int]):
 
 # List of pairs of positions that the chess piece at [i][j] can potentially "gánh", regardless of "colors"
 # List[List[ List[Tuple[Tuple,Tuple]] ]]
-OPPOSITE_POSITION_PAIRS = [
-    [gen_opposite_position_pairs((i, j)) for j in range(5)] for i in range(5)
+_OPPOSITE_POSITION_PAIRS = [
+    [_gen_opposite_position_pairs((i, j)) for j in range(5)] for i in range(5)
 ]
 
 
-def get_possible_pairs_to_carry(pos, board, player):
+def _get_possible_pairs_to_carry(pos, board, player):
     """Return the list of opponent's pieces that the PLAYER can gánh & vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
-    pairs = OPPOSITE_POSITION_PAIRS[pos[0]][pos[1]]
+    pairs = _OPPOSITE_POSITION_PAIRS[pos[0]][pos[1]]
     return [
         ((r0, c0), (r1, c1))
         for ((r0, c0), (r1, c1)) in pairs
@@ -125,11 +125,11 @@ def get_possible_pairs_to_carry(pos, board, player):
     ]
 
 
-def try_carrying(src, des, board, player) -> List[Tuple]:
+def _try_carrying(src, des, board, player) -> List[Tuple]:
     """Return the list of opponent's pieces that the PLAYER can gánh & vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
 
-    pairs = OPPOSITE_POSITION_PAIRS[des[0]][des[1]]
+    pairs = _OPPOSITE_POSITION_PAIRS[des[0]][des[1]]
     opponent = -player
 
     def get_pairs_to_be_captured(pair):
@@ -142,15 +142,15 @@ def try_carrying(src, des, board, player) -> List[Tuple]:
     captured_by_carrying = [
         pos for pair in pairs for pos in get_pairs_to_be_captured(pair)
     ]
-    new_board = board_after_move_only(src, des, board)
+    new_board = _board_after_move_only(src, des, board)
     for (r, c) in captured_by_carrying:
         new_board[r][c] = player
     # Surround after carrying
-    captured_by_surrounding = get_surrounded(new_board, -player)
+    captured_by_surrounding = _get_surrounded(new_board, -player)
     return captured_by_carrying + captured_by_surrounding
 
 
-def get_surrounded(board, player: int) -> List[Tuple]:
+def _get_surrounded(board, player: int) -> List[Tuple]:
     """Return the list of positions of chess pieces of PLAYER on BOARD which are
     "vây/chẹt"-ed and can't move."""
     return_value = []
@@ -173,7 +173,7 @@ def get_surrounded(board, player: int) -> List[Tuple]:
                         # to a free cluster
                         cluster += [(x, y)]
                         marked[x][y] = True
-                        moves = get_empty_neighbors((x, y), board)
+                        moves = _get_empty_neighbors((x, y), board)
                         # If a piece in the current cluster can still move, mark the cluster as free
                         if len(moves) > 0:
                             free_cluster = True
@@ -189,12 +189,12 @@ def get_surrounded(board, player: int) -> List[Tuple]:
     return return_value
 
 
-def try_surrounding(old_pos, new_pos, board, player) -> List[Tuple]:
+def _try_surrounding(old_pos, new_pos, board, player) -> List[Tuple]:
     """Return the list of opponent's pieces that the PLAYER can vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
-    new_board = board_after_move_only(old_pos, new_pos, board)
+    new_board = _board_after_move_only(old_pos, new_pos, board)
     x, y = new_pos
-    return get_surrounded(new_board, -player)
+    return _get_surrounded(new_board, -player)
 
 
 def all_to_be_captured(src, des, board, player) -> List[Tuple]:
@@ -203,13 +203,13 @@ def all_to_be_captured(src, des, board, player) -> List[Tuple]:
     # Avoid duplication
     return list(
         set(
-            try_carrying(src, des, board, player)
-            + try_surrounding(src, des, board, player)
+            _try_carrying(src, des, board, player)
+            + _try_surrounding(src, des, board, player)
         )
     )
 
 
-def infer_move(old_board, new_board):
+def _infer_move(old_board, new_board):
     """Return the move which has been played, given old_board and new_board.
     Tuple -> [Tuple, Tuple] | None"""
     changed_positions = [
@@ -225,7 +225,7 @@ def infer_move(old_board, new_board):
         return (src, des)
 
 
-def gen_random_board() -> List[List[int]]:
+def _gen_random_board() -> List[List[int]]:
     test_board_arr = (
         [-1 for _ in range(8)] + [1 for _ in range(8)] + [0 for _ in range(25 - 8 * 2)]
     )
@@ -233,13 +233,13 @@ def gen_random_board() -> List[List[int]]:
     return [test_board_arr[5 * i : 5 * i + 5] for i in range(5)]
 
 
-def check_open_rule(old_board, new_board, player):
+def _check_open_rule(old_board, new_board, player):
     """If "luật mở" is executing:
     Return the list of chess pieces which can move into the "mở" position and itself.
     Else return [] and None.
     -> tuple[list[tuple], tuple] | ([], None)
     """
-    moved = infer_move(old_board, new_board)
+    moved = _infer_move(old_board, new_board)
     if moved is not None:
         src, des = moved
         # The list of positions which are captured by the opponent's previous move
@@ -258,7 +258,7 @@ def check_open_rule(old_board, new_board, player):
         if (
             len(captured) == 0
             and len(possible_pieces_to_move) > 0
-            and len(get_possible_pairs_to_carry(src, new_board, player)) > 0
+            and len(_get_possible_pairs_to_carry(src, new_board, player)) > 0
         ):
             return (possible_pieces_to_move, src)
     return ([], None)
@@ -273,7 +273,7 @@ def get_all_legal_moves(
     old_board, current_board, player: int
 ) -> List[Tuple[Tuple, Tuple]]:
     """Return the list of all possible moves according to rules."""
-    possible_pieces_to_move, open_position = check_open_rule(
+    possible_pieces_to_move, open_position = _check_open_rule(
         old_board=old_board, new_board=current_board, player=player
     )
     if open_position and len(possible_pieces_to_move) > 0:
@@ -287,7 +287,7 @@ def get_all_legal_moves(
         return [
             (pos, new_pos)
             for pos in owned_positions
-            for new_pos in get_empty_neighbors(pos, current_board)
+            for new_pos in _get_empty_neighbors(pos, current_board)
         ]
 
 
