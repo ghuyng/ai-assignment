@@ -218,11 +218,33 @@ def _check_open_rule(old_board, new_board, player):
     return ([], None)
 
 
+def _greedy_alg(prev_board, board, player) -> Tuple[Tuple, Tuple]:
+    # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
+    # dict[tuple[tuple,tuple]: list[tuple]]
+    moves = get_all_legal_moves(prev_board, board, player)
+    if len(moves) > 0:
+        immediate_scores = {
+            (src, des): all_to_be_captured(src, des, board, player)
+            for (src, des) in moves
+        }
+
+        def get_immediate_score(move):
+            return len(immediate_scores[move])
+
+        max_immediate_score = max(map(get_immediate_score, moves))
+        src, des = random.choice(
+            [move for move in moves if get_immediate_score(move) == max_immediate_score]
+        )
+        return (src, des)
+    else:
+        return None
+
+
 # * PUBLIC
 
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
 # Store 2 boards, to simulate 2 players playing with each other
-previous_boards = {i: deepcopy(INITIAL_BOARD) for i in [-1, 1]}
+prev_boards = {i: deepcopy(INITIAL_BOARD) for i in [-1, 1]}
 
 
 def board_after_move_and_capturing(src, des, board):
@@ -291,38 +313,15 @@ def get_all_legal_moves(
         ]
 
 
-def choose_move_alg0(board, player) -> Tuple[Tuple, Tuple]:
-    # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
-    # dict[tuple[tuple,tuple]: list[tuple]]
-    global previous_boards
-    moves = get_all_legal_moves(previous_boards[player], board, player)
-    if len(moves) > 0:
-        immediate_scores = {
-            (src, des): all_to_be_captured(src, des, board, player)
-            for (src, des) in moves
-        }
-
-        def get_immediate_score(move):
-            return len(immediate_scores[move])
-
-        max_immediate_score = max(map(get_immediate_score, moves))
-        src, des = random.choice(
-            [move for move in moves if get_immediate_score(move) == max_immediate_score]
-        )
-        return (src, des)
-    else:
-        return None
-
-
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
-    move = choose_move_alg1(board, player)
+    move = choose_move_alg1(prev_boards[player], board, player)
     if not move:
         return None
     src, des = move
     new_board = board_after_move_and_capturing(src, des, board)
-    previous_boards[player] = deepcopy(new_board)
+    prev_boards[player] = deepcopy(new_board)
 
     return (src, des)
 
@@ -334,11 +333,11 @@ def simulate():
     while get_winner(board) == 0:
         time_before = time.time()
         if player == -1:
-            src, des = choose_move_alg0(deepcopy(board), player)
+            src, des = choose_move_alg0(prev_boards[player], deepcopy(board), player)
         else:
-            src, des = choose_move_alg1(deepcopy(board), player)
+            src, des = choose_move_alg1(prev_boards[player], deepcopy(board), player)
         time_after = time.time()
-        previous_boards[player] = deepcopy(board)
+        prev_boards[player] = deepcopy(board)
 
         board = board_after_move_and_capturing(src, des, board)
         turn += 1
@@ -351,6 +350,12 @@ def simulate():
 # * EDIT THIS!
 
 
-def choose_move_alg1(board, player) -> Tuple[Tuple, Tuple]:
+def choose_move_alg0(prev_board, board, player) -> Tuple[Tuple, Tuple]:
+    # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
+    # dict[tuple[tuple,tuple]: list[tuple]]
+    return _greedy_alg(prev_board, board, player)
+
+
+def choose_move_alg1(prev_board, board, player) -> Tuple[Tuple, Tuple]:
     # TODO: Implement this!
-    return choose_move_alg0(board, player)
+    return choose_move_alg0(prev_board, board, player)

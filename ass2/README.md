@@ -10,7 +10,7 @@
 
 -   `all_to_be_captured()`
 
--   `previous_boards[player_id]`: has 2 slots, each for a player, don't modify this,
+-   `prev_boards[player_id]`: has 2 slots, each for a player, don't modify this,
     implement your own method of saving previous board(s)
 
 -   `get_all_legal_moves()`
