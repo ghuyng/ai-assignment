@@ -2,7 +2,7 @@
  **Cờ Gánh bot**
 </p>
 
-# Useful expose functions and constants for algorithms
+# Useful exposed functions and constants for algorithms
 
 -   `INITIAL_BOARD`: use deepcopy to replicate it
 
