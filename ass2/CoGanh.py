@@ -22,7 +22,7 @@ INITIAL_BOARD = [
 ]
 
 
-def board_to_string(board):
+def board_to_string(board) -> str:
     return reduce(
         operator.add,
         [("\t " if i > 0 else "\n") + str(row[i]) for row in board for i in range(5)],
@@ -57,7 +57,7 @@ def get_empty_neighbors(position, board) -> List[Tuple]:
     return [(i, j) for (i, j) in moves if board[i][j] == 0]
 
 
-def get_winner(board):
+def get_winner(board) -> int:
     pO_on_board = True in [(1 in row) for row in board]
     pX_on_board = True in [(-1 in row) for row in board]
     if pO_on_board and not pX_on_board:
@@ -327,17 +327,18 @@ def simulate():
     board = deepcopy(INITIAL_BOARD)
     turn = 0
     while get_winner(board) == 0:
-
+        time_before = time.time()
         if player == -1:
-            src, des = choose_move_alg0(board, player)
+            src, des = choose_move_alg0(deepcopy(board), player)
         else:
             src, des = choose_move_alg1(deepcopy(board), player)
+        time_after = time.time()
         previous_boards[player] = deepcopy(board)
 
         board = board_after_move_and_capturing(src, des, board)
         turn += 1
         print(
-            f"Turn {turn}: {player} moves from {src} to {des}, the board becomes {board_to_string(board)}"
+            f"Turn {turn}: {player} moved from {src} to {des} after {time_after - time_before}s, the board became: {board_to_string(board)}"
         )
         player = -player
 
