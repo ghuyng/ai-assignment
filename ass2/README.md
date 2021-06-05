@@ -1,6 +1,7 @@
 <p align="center" style="font-size:xxx-large">
  **Cờ Gánh bot**
 </p>
+
 # Useful expose functions and constants for algorithms
 
 -   `INITIAL_BOARD`: use deepcopy to replicate it

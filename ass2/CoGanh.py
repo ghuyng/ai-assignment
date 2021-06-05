@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import numpy as np
 from functools import reduce
 import operator
 
@@ -297,25 +296,31 @@ def choose_move_alg0(board, player) -> Tuple[Tuple, Tuple]:
     # dict[tuple[tuple,tuple]: list[tuple]]
     global previous_boards
     moves = get_all_legal_moves(previous_boards[player], board, player)
-    immediate_scores = {
-        (src, des): all_to_be_captured(src, des, board, player) for (src, des) in moves
-    }
+    if len(moves) > 0:
+        immediate_scores = {
+            (src, des): all_to_be_captured(src, des, board, player)
+            for (src, des) in moves
+        }
 
-    def get_immediate_score(move):
-        return len(immediate_scores[move])
+        def get_immediate_score(move):
+            return len(immediate_scores[move])
 
-    max_immediate_score = max(map(get_immediate_score, moves))
-    src, des = random.choice(
-        [move for move in moves if get_immediate_score(move) == max_immediate_score]
-    )
-    return (src, des)
+        max_immediate_score = max(map(get_immediate_score, moves))
+        src, des = random.choice(
+            [move for move in moves if get_immediate_score(move) == max_immediate_score]
+        )
+        return (src, des)
+    else:
+        return None
 
 
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
-
-    src, des = choose_move_alg1(board, player)
+    move = choose_move_alg1(board, player)
+    if not move:
+        return None
+    src, des = move
     new_board = board_after_move_and_capturing(src, des, board)
     previous_boards[player] = deepcopy(new_board)
 
