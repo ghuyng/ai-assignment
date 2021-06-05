@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 
-from functools import reduce
-import operator
-
-import time, copy, random
-
-from typing import List, Tuple
-
-from copy import deepcopy
-
 import math
 from math import log
+from operator import add as addop
+import time, copy, random
+from copy import deepcopy
+from functools import reduce
+from typing import List, Tuple
 
 INITIAL_BOARD = [
     [1, 1, 1, 1, 1],
@@ -19,7 +15,6 @@ INITIAL_BOARD = [
     [-1, 0, 0, 0, -1],
     [-1, -1, -1, -1, -1],
 ]
-
 
 # * PRIVATE
 
@@ -225,7 +220,6 @@ def _check_open_rule(old_board, new_board, player):
 
 # * PUBLIC
 
-
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
 # Store 2 boards, to simulate 2 players playing with each other
 previous_boards = {i: deepcopy(INITIAL_BOARD) for i in [-1, 1]}
@@ -254,7 +248,7 @@ def get_winner(board) -> int:
 
 def board_to_string(board) -> str:
     return reduce(
-        operator.add,
+        addop,
         [("\t " if i > 0 else "\n") + str(row[i]) for row in board for i in range(5)],
     )
 
@@ -354,7 +348,7 @@ def simulate():
         player = -player
 
 
-# * EDITED THIS!
+# * EDIT THIS!
 
 
 def choose_move_alg1(board, player) -> Tuple[Tuple, Tuple]:
