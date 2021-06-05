@@ -21,15 +21,7 @@ INITIAL_BOARD = [
 ]
 
 
-def board_to_string(board) -> str:
-    return reduce(
-        operator.add,
-        [("\t " if i > 0 else "\n") + str(row[i]) for row in board for i in range(5)],
-    )
-
-
-def print_board(b):
-    print(board_to_string(b))
+# * PRIVATE
 
 
 def _generate_neighbor_positions(position):
@@ -46,24 +38,14 @@ def _generate_neighbor_positions(position):
 
 
 # Pre-compute for faster access
-NEIGHBORS_POSITIONS = [
+_NEIGHBORS_POSITIONS = [
     [_generate_neighbor_positions((i, j)) for j in range(5)] for i in range(5)
 ]
 
 
 def _get_empty_neighbors(position, board) -> List[Tuple]:
-    moves = NEIGHBORS_POSITIONS[position[0]][position[1]]
+    moves = _NEIGHBORS_POSITIONS[position[0]][position[1]]
     return [(i, j) for (i, j) in moves if board[i][j] == 0]
-
-
-def get_winner(board) -> int:
-    pO_on_board = True in [(1 in row) for row in board]
-    pX_on_board = True in [(-1 in row) for row in board]
-    if pO_on_board and not pX_on_board:
-        return 1
-    if pX_on_board and not pO_on_board:
-        return -1
-    return 0
 
 
 def _board_after_move_only(source, dest, board):
@@ -76,21 +58,10 @@ def _board_after_move_only(source, dest, board):
     return new_board
 
 
-def board_after_move_and_capturing(src, des, board):
-    """Return board after moving from src to des and apply capturing rules.
-    Pure function."""
-    player = board[src[0]][src[1]]
-    capturing = all_to_be_captured(src, des, board, player)
-    new_board = _board_after_move_only(src, des, board)
-    for (r, c) in capturing:
-        new_board[r][c] = player
-    return new_board
-
-
 def _gen_opposite_position_pairs(position: Tuple[int, int]):
     """Return a list of pairs of opposing positions around the argument.
     -> List[Tuple[Tuple[int, int], Tuple[int, int]]]"""
-    adjacent_positions = NEIGHBORS_POSITIONS[position[0]][position[1]]
+    adjacent_positions = _NEIGHBORS_POSITIONS[position[0]][position[1]]
     x, y = position
 
     def helper(positions, return_pairs=[]):
@@ -180,7 +151,7 @@ def _get_surrounded(board, player: int) -> List[Tuple]:
                         # Process nearby unchecked allies
                         stk += [
                             (r, c)
-                            for (r, c) in NEIGHBORS_POSITIONS[x][y]
+                            for (r, c) in _NEIGHBORS_POSITIONS[x][y]
                             if board[r][c] == player and marked[r][c] == False
                         ]
                     # Add to the list of surrounded chess pieces
@@ -195,18 +166,6 @@ def _try_surrounding(old_pos, new_pos, board, player) -> List[Tuple]:
     new_board = _board_after_move_only(old_pos, new_pos, board)
     x, y = new_pos
     return _get_surrounded(new_board, -player)
-
-
-def all_to_be_captured(src, des, board, player) -> List[Tuple]:
-    """Return the list of opponent's chess pieces that current PLAYER can
-    immediately capture by moving from SRC to DES."""
-    # Avoid duplication
-    return list(
-        set(
-            _try_carrying(src, des, board, player)
-            + _try_surrounding(src, des, board, player)
-        )
-    )
 
 
 def _infer_move(old_board, new_board):
@@ -252,7 +211,7 @@ def _check_open_rule(old_board, new_board, player):
         # Get all of our pieces which can move into the "mở" position
         possible_pieces_to_move = [
             pos
-            for pos in NEIGHBORS_POSITIONS[src[0]][src[1]]
+            for pos in _NEIGHBORS_POSITIONS[src[0]][src[1]]
             if new_board[pos[0]][pos[1]] == player
         ]
         if (
@@ -264,9 +223,56 @@ def _check_open_rule(old_board, new_board, player):
     return ([], None)
 
 
+# * PUBLIC
+
+
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
 # Store 2 boards, to simulate 2 players playing with each other
 previous_boards = {i: deepcopy(INITIAL_BOARD) for i in [-1, 1]}
+
+
+def board_after_move_and_capturing(src, des, board):
+    """Return board after moving from src to des and apply capturing rules.
+    Pure function."""
+    player = board[src[0]][src[1]]
+    capturing = all_to_be_captured(src, des, board, player)
+    new_board = _board_after_move_only(src, des, board)
+    for (r, c) in capturing:
+        new_board[r][c] = player
+    return new_board
+
+
+def get_winner(board) -> int:
+    pO_on_board = True in [(1 in row) for row in board]
+    pX_on_board = True in [(-1 in row) for row in board]
+    if pO_on_board and not pX_on_board:
+        return 1
+    if pX_on_board and not pO_on_board:
+        return -1
+    return 0
+
+
+def board_to_string(board) -> str:
+    return reduce(
+        operator.add,
+        [("\t " if i > 0 else "\n") + str(row[i]) for row in board for i in range(5)],
+    )
+
+
+def print_board(b):
+    print(board_to_string(b))
+
+
+def all_to_be_captured(src, des, board, player) -> List[Tuple]:
+    """Return the list of opponent's chess pieces that current PLAYER can
+    immediately capture by moving from SRC to DES."""
+    # Avoid duplication
+    return list(
+        set(
+            _try_carrying(src, des, board, player)
+            + _try_surrounding(src, des, board, player)
+        )
+    )
 
 
 def get_all_legal_moves(
@@ -346,6 +352,9 @@ def simulate():
             f"Turn {turn}: {player} moved from {src} to {des} after {time_after - time_before}s, the board became: {board_to_string(board)}"
         )
         player = -player
+
+
+# * EDITED THIS!
 
 
 def choose_move_alg1(board, player) -> Tuple[Tuple, Tuple]:
