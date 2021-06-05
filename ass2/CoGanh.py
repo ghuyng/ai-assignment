@@ -218,6 +218,31 @@ def _check_open_rule(old_board, new_board, player):
     return ([], None)
 
 
+def _rate_greedy_open(src, des, board, player) -> int:
+    new_board = board_after_move_and_capturing(src, des, board)
+    opponent_moves, is_opened = _check_open_rule(board, new_board, -player)
+
+    def greedy_best_after_opp(opp_src, opp_des):
+        captured_by_opponent = len(
+            all_to_be_captured(opp_src, opp_des, new_board, -player)
+        )
+        new2_board = board_after_move_and_capturing(opp_src, opp_des, new_board)
+        moves = get_all_legal_moves(new_board, new2_board, player)
+        if len(moves) > 0:
+            return max(
+                len(all_to_be_captured(new2_src, new2_des, new2_board, player))
+                - captured_by_opponent
+                for (new2_src, new2_des) in moves
+            )
+        else:
+            return 0
+
+    if is_opened:
+        return min(greedy_best_after_opp(opp_src, src) for opp_src in opponent_moves)
+    else:
+        return 0
+
+
 def _greedy_alg(prev_board, board, player) -> Tuple[Tuple, Tuple]:
     # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
     # dict[tuple[tuple,tuple]: list[tuple]]
@@ -229,7 +254,8 @@ def _greedy_alg(prev_board, board, player) -> Tuple[Tuple, Tuple]:
         }
 
         def get_immediate_score(move):
-            return len(immediate_scores[move])
+            l = len(immediate_scores[move])
+            return l if l > 0 else _rate_greedy_open(move[0], move[1], board, player)
 
         max_immediate_score = max(map(get_immediate_score, moves))
         src, des = random.choice(
@@ -279,14 +305,14 @@ def print_board(b):
     print(board_to_string(b))
 
 
-def all_to_be_captured(src, des, board, player) -> List[Tuple]:
+def all_to_be_captured(src, des, board, capturer) -> List[Tuple]:
     """Return the list of opponent's chess pieces that current PLAYER can
     immediately capture by moving from SRC to DES."""
     # Avoid duplication
     return list(
         set(
-            _try_carrying(src, des, board, player)
-            + _try_surrounding(src, des, board, player)
+            _try_carrying(src, des, board, capturer)
+            + _try_surrounding(src, des, board, capturer)
         )
     )
 
