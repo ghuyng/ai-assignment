@@ -243,7 +243,7 @@ def _rate_greedy_open(src, des, board, player) -> int:
         return 0
 
 
-def _greedy_alg(prev_board, board, player) -> Tuple[Tuple, Tuple]:
+def _greedy_alg(prev_board, board, player):
     # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
     # dict[tuple[tuple,tuple]: list[tuple]]
     moves = get_all_legal_moves(prev_board, board, player)
@@ -271,6 +271,14 @@ def _greedy_alg(prev_board, board, player) -> Tuple[Tuple, Tuple]:
 # Used to store the board's information after "our" previous move, to adhere to an "open move"
 # Store 2 boards, to simulate 2 players playing with each other
 prev_boards = {i: deepcopy(INITIAL_BOARD) for i in [-1, 1]}
+
+
+def benchmark(func, *args):
+    time0 = time.time()
+    val = func(*args)
+    time1 = time.time()
+    print(func, args, f"takes {time1 - time0}s")
+    return val
 
 
 def board_after_move_and_capturing(src, des, board):
@@ -339,6 +347,45 @@ def get_all_legal_moves(
         ]
 
 
+def rate_board(board, player):
+    """Return the difference of PLAYER and OPPONENT's number chess pieces on BOARD."""
+    num_player = sum(1 for i in range(5) for j in range(5) if board[i][j] == player)
+    num_opponent = sum(1 for i in range(5) for j in range(5) if board[i][j] == -player)
+    return num_player - num_opponent
+
+
+def minimax_rate_move(src, des, board, player, height):
+    new_board = board_after_move_and_capturing(src, des, board)
+    opponent_moves = get_all_legal_moves(board, new_board, -player)
+    if height == 0 or len(opponent_moves) == 0:
+        return rate_board(new_board, player)
+    else:
+        return max(
+            -minimax_rate_move(n_src, n_des, new_board, -player, height - 1)
+            for (n_src, n_des) in opponent_moves
+        )
+
+
+def minimax_alg(prev_board, board, player, initial_height):
+    moves = get_all_legal_moves(prev_board, board, player)
+    if len(moves) > 0:
+        scores = {
+            (src, des): minimax_rate_move(src, des, board, player, initial_height)
+            for (src, des) in moves
+        }
+
+        def get_immediate_score(move):
+            return scores[move]
+
+        max_immediate_score = max(map(get_immediate_score, moves))
+        src, des = random.choice(
+            [move for move in moves if get_immediate_score(move) == max_immediate_score]
+        )
+        return (src, des)
+    else:
+        return None
+
+
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
@@ -376,12 +423,16 @@ def simulate():
 # * EDIT THIS!
 
 
-def choose_move_alg0(prev_board, board, player) -> Tuple[Tuple, Tuple]:
+def choose_move_alg0(prev_board, board, player):
     # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
     # dict[tuple[tuple,tuple]: list[tuple]]
     return _greedy_alg(prev_board, board, player)
 
 
-def choose_move_alg1(prev_board, board, player) -> Tuple[Tuple, Tuple]:
+def choose_move_alg1(prev_board, board, player):
     # TODO: Implement this!
-    return choose_move_alg0(prev_board, board, player)
+    return minimax_alg(prev_board, board, player, initial_height=4)
+    # return choose_move_alg0(prev_board, board, player)
+
+
+# simulate()
