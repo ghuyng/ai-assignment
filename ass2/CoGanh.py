@@ -404,7 +404,7 @@ def ab_rate_board(
                 board, new_board, -played_player, original_player, height - 1, al, be
             )
             value = min(value, new_val)
-            al = min(be, value)
+            be = min(be, value)
             if value <= al:
                 break
     return value
@@ -428,7 +428,7 @@ def ab_pruning_alg(prev_board, board, player, initial_height):
             return scores[move]
 
         max_score = max(map(get_score, moves))
-        print(scores)
+        # print(scores)
         src, des = random.choice(
             [move for move in moves if get_score(move) == max_score]
         )
@@ -481,7 +481,7 @@ def choose_move_alg0(prev_board, board, player):
 
 def choose_move_alg1(prev_board, board, player):
     # return minimax_alg(prev_board, board, player, initial_height=1)
-    return ab_pruning_alg(prev_board, board, player, initial_height=3)
+    return ab_pruning_alg(prev_board, board, player, initial_height=2)
     # return choose_move_alg0(prev_board, board, player)
 
 
