@@ -437,6 +437,127 @@ def ab_pruning_alg(prev_board, board, player, initial_height):
         return None
 
 
+class Node:
+    """A node in the game tree. We wins if the viewpoint is    player 1"""
+
+    def __init__(self, player, move=None, parent=None, state=None, preState=None):
+        self.move = move
+        self.parentNode = parent
+        self.childNodes = []
+        self.wins = 0
+        self.visits = 0
+        self.untriedMoves = get_all_legal_moves(
+            preState, state, -player
+        )  # future child nodes
+        self.playerJustMoved = player  # previous player
+
+    def UCTChooseChild(self):
+        """lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
+        exploration versus exploitation.
+        """
+        s = sorted(
+            self.childNodes,
+            key=lambda c: c.wins / c.visits
+            + math.sqrt(2 * log(self.visits) / c.visits),
+        )[-1]
+        return s
+
+    def addChild(self, m, s, preS):
+        """Remove m from untriedMoves and add a new child node for this move.
+        Return the added child node
+        """
+        n = Node(
+            player=-self.playerJustMoved, move=m, parent=self, state=s, preState=preS
+        )
+        self.untriedMoves.remove(m)
+        self.childNodes.append(n)
+        return n
+
+    def updateNode(self, result):
+        """Update this node - one additional visit and result additional wins. result must be from the viewpoint of playerJustmoved."""
+        self.visits += 1
+        self.wins += result
+
+
+def UCT(player, rootstate, iter, prev_board, verbose=False):
+    """Conduct a UCT search for itermax iterations starting from rootstate.
+    Return the best move from the rootstate.
+    Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0]."""
+    rootnode = Node(player=player, state=rootstate, preState=prev_board)
+
+    for i in range(iter):
+        node = rootnode
+        state = deepcopy(rootstate)
+        pre_state = deepcopy(state)
+        currentPlayer = -player  # turn of the player x
+
+        # Select
+        while (
+            node.untriedMoves == [] and node.childNodes != []
+        ):  # node is fully expanded and non-terminal, loop until have untried Child or it is leaf node
+            # choose the next child
+            node = node.UCTChooseChild()
+            # update the state of the board ((x,y),(x,y))
+            pre_state = deepcopy(state)
+            state = board_after_move_and_capturing(node.move[0], node.move[1], state)
+            currentPlayer = -currentPlayer
+
+        # Expand
+        if (
+            node.untriedMoves != []
+        ):  # if we can expand (i.e. state/node is non-terminal)
+            m = random.choice(node.untriedMoves)
+            # update the state of the board
+            pre_state = deepcopy(state)
+            state = board_after_move_and_capturing(m[0], m[1], state)
+            currentPlayer = -currentPlayer
+
+            node = node.addChild(m, state, pre_state)  # add child and descend tree
+
+        # Rollout - this can often be made orders of magnitude quicker using a state.GetRandomMove() function
+        height = 0
+        while get_winner(state) == 0:  # while state is non-terminal
+            if height > 30:
+                break
+            choice = random.choice(get_all_legal_moves(pre_state, state, currentPlayer))
+            # update the state of the board
+            pre_state = deepcopy(state)
+            state = board_after_move_and_capturing(choice[0], choice[1], state)
+            # print_board(state)
+            currentPlayer = -currentPlayer
+            height += 1
+
+        # cout board
+        # print(f"The board becomes {board_to_string(state)}")
+
+        # Backpropagate
+        while (
+            node != None
+        ):  # backpropagate from the expanded node and work back to the root node
+            if height > 30:
+                winner = player
+            else:
+                winner = get_winner(state)
+
+            if winner == -player:
+                node.updateNode(1)
+            else:
+                node.updateNode(0)
+
+            # state is terminal. Update node with result from POV of node.playerJustMoved
+            node = node.parentNode
+
+    # cout root node
+    # for i in rootnode.childNodes:
+    #     print(i.move)
+    #     print(i.wins)
+    #     print(i.visits)
+
+    return sorted(rootnode.childNodes, key=lambda c: c.visits)[
+        -1
+    ].move  # return the move that was most visited
+
+
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
