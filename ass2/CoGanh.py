@@ -128,17 +128,14 @@ def _get_surrounded(board, player: int) -> List[Tuple]:
     cluster = []
     for r in range(5):
         for c in range(5):
-            if board[r][c] == player:
+            if board[r][c] == player and not marked[r][c]:
                 stk.append((r, c))
                 # Whether current cluster is not surrounded
                 free_cluster = False
                 while len(stk) > 0:
                     x, y = stk.pop()
+                    cluster += [(x, y)]
                     if not marked[x][y]:
-                        # Don't append to the cluster before checking marked:
-                        # the position may have already been marked and belongs
-                        # to a free cluster
-                        cluster += [(x, y)]
                         marked[x][y] = True
                         moves = _get_empty_neighbors((x, y), board)
                         # If a piece in the current cluster can still move, mark the cluster as free
@@ -161,7 +158,6 @@ def _try_surrounding(old_pos, new_pos, board, player) -> List[Tuple]:
     """Return the list of opponent's pieces that the PLAYER can vây/chẹt if they move from OLD_POS to NEW_POS.
     board: before executing the move"""
     new_board = _board_after_move_only(old_pos, new_pos, board)
-    x, y = new_pos
     return _get_surrounded(new_board, -player)
 
 
@@ -179,14 +175,6 @@ def _infer_move(old_board, new_board):
         # des position: was empty on the old board
         des = [pos for pos in changed_positions if old_board[pos[0]][pos[1]] == 0][0]
         return (src, des)
-
-
-def _gen_random_board() -> List[List[int]]:
-    test_board_arr = (
-        [-1 for _ in range(8)] + [1 for _ in range(8)] + [0 for _ in range(25 - 8 * 2)]
-    )
-    random.shuffle(test_board_arr)
-    return [test_board_arr[5 * i : 5 * i + 5] for i in range(5)]
 
 
 def _check_open_rule(old_board, new_board, player):
@@ -357,14 +345,17 @@ def rate_board(board, player):
 
 
 def minimax_rate_move(src, des, board, player, height):
+    # The board after moving
     new_board = board_after_move_and_capturing(src, des, board)
     opponent_moves = get_all_legal_moves(board, new_board, -player)
-    if height == 0 or len(opponent_moves) == 0:
+    # Terminal node
+    if height <= 0 or len(opponent_moves) == 0:
         return rate_board(new_board, player)
+    # Recursively apply the algorithm on opponent's moves
     else:
         return max(
-            -minimax_rate_move(n_src, n_des, new_board, -player, height - 1)
-            for (n_src, n_des) in opponent_moves
+            -minimax_rate_move(_src, _des, new_board, -player, height - 1)
+            for (_src, _des) in opponent_moves
         )
 
 
@@ -376,12 +367,12 @@ def minimax_alg(prev_board, board, player, initial_height):
             for (src, des) in moves
         }
 
-        def get_immediate_score(move):
+        def get_score(move):
             return scores[move]
 
-        max_immediate_score = max(map(get_immediate_score, moves))
+        max_score = max(map(get_score, moves))
         src, des = random.choice(
-            [move for move in moves if get_immediate_score(move) == max_immediate_score]
+            [move for move in moves if get_score(move) == max_score]
         )
         return (src, des)
     else:
@@ -433,5 +424,8 @@ def choose_move_alg0(prev_board, board, player):
 
 def choose_move_alg1(prev_board, board, player):
     # TODO: Implement this!
-    # return minimax_alg(prev_board, board, player, initial_height=4)
-    return choose_move_alg0(prev_board, board, player)
+    return minimax_alg(prev_board, board, player, initial_height=1)
+    # return choose_move_alg0(prev_board, board, player)
+
+
+# simulate()
