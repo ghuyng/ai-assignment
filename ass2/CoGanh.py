@@ -122,13 +122,14 @@ def _get_surrounded(board, player: int) -> List[Tuple]:
     return_value = []
     # Save the visited positions to avoid repeated traversal
     marked = [[False for _ in range(5)] for _ in range(5)]
+    # A stack for flood filling algorithm
+    stk = []
+    # A contiguous cluster of chess pieces that are surrounded unless one of them can move
+    cluster = []
     for r in range(5):
         for c in range(5):
             if board[r][c] == player:
-                # A stack for flood filling algorithm
-                stk = [(r, c)]
-                # A contiguous cluster of chess pieces that are surrounded unless one of them can move
-                cluster = []
+                stk.append((r, c))
                 # Whether current cluster is not surrounded
                 free_cluster = False
                 while len(stk) > 0:
@@ -152,6 +153,7 @@ def _get_surrounded(board, player: int) -> List[Tuple]:
                     # Add to the list of surrounded chess pieces
                 if not free_cluster:
                     return_value += cluster
+                cluster.clear()
     return return_value
 
 
