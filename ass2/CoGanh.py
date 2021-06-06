@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import math
-from math import log
+from math import log, inf
 from operator import add as addop
 import time, copy, random
 from copy import deepcopy
@@ -379,6 +379,64 @@ def minimax_alg(prev_board, board, player, initial_height):
         return None
 
 
+def ab_rate_board(
+    prev_board, board, played_player, original_player, height, al=-inf, be=inf
+) -> float:
+    next_moves = get_all_legal_moves(prev_board, board, -played_player)
+    if height == 0 or len(next_moves) == 0:
+        return rate_board(board, played_player)
+    if -played_player == original_player:
+        value = -inf
+        for (src, des) in next_moves:
+            new_board = board_after_move_and_capturing(src, des, board)
+            new_val = ab_rate_board(
+                board, new_board, -played_player, original_player, height - 1, al, be
+            )
+            value = max(value, new_val)
+            al = max(al, value)
+            if value >= be:
+                break
+    else:
+        value = inf
+        for (src, des) in next_moves:
+            new_board = board_after_move_and_capturing(src, des, board)
+            new_val = ab_rate_board(
+                board, new_board, -played_player, original_player, height - 1, al, be
+            )
+            value = min(value, new_val)
+            al = min(be, value)
+            if value <= al:
+                break
+    return value
+
+
+def ab_pruning_alg(prev_board, board, player, initial_height):
+    moves = get_all_legal_moves(prev_board, board, player)
+    if len(moves) > 0:
+        scores = {
+            (src, des): ab_rate_board(
+                board,
+                board_after_move_and_capturing(src, des, board),
+                player,
+                player,
+                initial_height,
+            )
+            for (src, des) in moves
+        }
+
+        def get_score(move):
+            return scores[move]
+
+        max_score = max(map(get_score, moves))
+        print(scores)
+        src, des = random.choice(
+            [move for move in moves if get_score(move) == max_score]
+        )
+        return (src, des)
+    else:
+        return None
+
+
 def move(board, player):
     # (board: List[List[int]], player: int)
     # -> Tuple[Tuple[int, int], Tuple[int, int]] | None
@@ -417,14 +475,13 @@ def simulate():
 
 
 def choose_move_alg0(prev_board, board, player):
-    # Dumb Greedy algorithm: randomly choose from the moves which has the best immediate reward
-    # dict[tuple[tuple,tuple]: list[tuple]]
+    # return minimax_alg(prev_board, board, player, initial_height=1)
     return _greedy_alg(prev_board, board, player)
 
 
 def choose_move_alg1(prev_board, board, player):
-    # TODO: Implement this!
-    return minimax_alg(prev_board, board, player, initial_height=1)
+    # return minimax_alg(prev_board, board, player, initial_height=1)
+    return ab_pruning_alg(prev_board, board, player, initial_height=3)
     # return choose_move_alg0(prev_board, board, player)
 
 
