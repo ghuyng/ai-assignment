@@ -1,5 +1,5 @@
 <p align="center" style="font-size:xxx-large">
- **Cờ Gánh bot**
+ Cờ Gánh bot
 </p>
 
 # Useful exposed functions and constants for algorithms
@@ -21,12 +21,13 @@
 
 # Implement & Test
 
-Replace `choose_move_alg1`'s body with your algorithm (or `choose_move_alg0`, too).
-
-It's currently unknown how grading will be carried out so we don't define `main()`.
-
-If you don't feel the need to write another file to test, it's possible to run this from the command line:
+In `CoGanh.py`: Replace `choose_move_alg1`'s body with your algorithm (optionally `choose_move_alg0`, too).
 
 ```bash
-python -c 'from CoGanh import * ; simulate()'
+
+python -m main
+
+# With profiler to find out the bottle neck
+python -m cProfile -s tottime -m main
+
 ```

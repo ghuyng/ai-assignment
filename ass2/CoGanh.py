@@ -433,8 +433,5 @@ def choose_move_alg0(prev_board, board, player):
 
 def choose_move_alg1(prev_board, board, player):
     # TODO: Implement this!
-    return minimax_alg(prev_board, board, player, initial_height=4)
-    # return choose_move_alg0(prev_board, board, player)
-
-
-# simulate()
+    # return minimax_alg(prev_board, board, player, initial_height=4)
+    return choose_move_alg0(prev_board, board, player)
