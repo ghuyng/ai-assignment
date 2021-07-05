@@ -606,7 +606,7 @@ def choose_move_alg0(prev_board, board, player, remain_time):
 
 def choose_move_alg1(prev_board, board, player, remain_time):
     # return minimax_alg(prev_board, board, player, initial_height=1)
-    return ab_pruning_alg(prev_board, board, player, initial_height=6)
+    return ab_pruning_alg(prev_board, board, player, initial_height=4)
     # return choose_move_alg0(prev_board, board, player)
 
 
