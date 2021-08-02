@@ -1,0 +1,888 @@
+Turn 1: 1 moved from (2, 0) to (3, 1) after 0.8257699012756348s, the board became: 
+1	 1	 1	 1	 1
+1	 0	 0	 0	 1
+0	 0	 0	 0	 -1
+-1	 1	 0	 0	 -1
+-1	 -1	 -1	 -1	 -1
+Turn 2: -1 moved from (3, 0) to (2, 0) after 0.3224771022796631s, the board became: 
+1	 1	 1	 1	 1
+1	 0	 0	 0	 1
+-1	 0	 0	 0	 -1
+0	 1	 0	 0	 -1
+-1	 -1	 -1	 -1	 -1
+Turn 3: 1 moved from (3, 1) to (3, 0) after 0.8175582885742188s, the board became: 
+1	 1	 1	 1	 1
+1	 0	 0	 0	 1
+1	 0	 0	 0	 -1
+1	 0	 0	 0	 -1
+1	 -1	 -1	 -1	 -1
+Turn 4: -1 moved from (4, 2) to (3, 1) after 0.6965541839599609s, the board became: 
+1	 1	 1	 1	 1
+1	 0	 0	 0	 1
+1	 0	 0	 0	 -1
+1	 -1	 0	 0	 -1
+1	 -1	 0	 -1	 -1
+Turn 5: 1 moved from (0, 4) to (1, 3) after 0.6232187747955322s, the board became: 
+1	 1	 1	 1	 0
+1	 0	 0	 1	 1
+1	 0	 0	 0	 -1
+1	 -1	 0	 0	 -1
+1	 -1	 0	 -1	 -1
+Turn 6: -1 moved from (4, 4) to (3, 3) after 0.8073809146881104s, the board became: 
+1	 1	 1	 1	 0
+1	 0	 0	 1	 1
+1	 0	 0	 0	 -1
+1	 -1	 0	 -1	 -1
+1	 -1	 0	 -1	 0
+Turn 7: 1 moved from (1, 3) to (2, 2) after 0.5435962677001953s, the board became: 
+1	 1	 1	 1	 0
+1	 0	 0	 0	 1
+1	 0	 1	 0	 -1
+1	 -1	 0	 -1	 -1
+1	 -1	 0	 -1	 0
+Turn 8: -1 moved from (3, 1) to (2, 1) after 1.0971615314483643s, the board became: 
+1	 1	 1	 1	 0
+1	 0	 0	 0	 1
+-1	 -1	 -1	 0	 -1
+1	 0	 0	 -1	 -1
+1	 -1	 0	 -1	 0
+Turn 9: 1 moved from (4, 0) to (3, 1) after 1.3594334125518799s, the board became: 
+1	 1	 1	 1	 0
+1	 0	 0	 0	 1
+-1	 1	 -1	 0	 -1
+1	 1	 0	 -1	 -1
+0	 1	 0	 -1	 0
+Turn 10: -1 moved from (3, 3) to (2, 3) after 1.089949607849121s, the board became: 
+1	 1	 1	 1	 0
+1	 0	 0	 0	 1
+-1	 1	 -1	 -1	 -1
+1	 1	 0	 0	 -1
+0	 1	 0	 -1	 0
+Turn 11: 1 moved from (0, 1) to (1, 1) after 0.9166646003723145s, the board became: 
+1	 0	 1	 1	 0
+1	 1	 0	 0	 1
+1	 1	 -1	 -1	 -1
+1	 1	 0	 0	 -1
+0	 1	 0	 -1	 0
+Turn 12: -1 moved from (3, 4) to (4, 4) after 1.2308614253997803s, the board became: 
+1	 0	 1	 1	 0
+1	 1	 0	 0	 1
+1	 1	 -1	 -1	 -1
+1	 1	 0	 0	 0
+0	 1	 0	 -1	 -1
+Turn 13: 1 moved from (4, 1) to (4, 2) after 1.1527817249298096s, the board became: 
+1	 0	 1	 1	 0
+1	 1	 0	 0	 1
+1	 1	 -1	 -1	 -1
+1	 1	 0	 0	 0
+0	 0	 1	 -1	 -1
+Turn 14: -1 moved from (2, 2) to (3, 3) after 0.9143514633178711s, the board became: 
+1	 0	 1	 1	 0
+1	 1	 0	 0	 1
+1	 1	 0	 -1	 -1
+1	 1	 0	 -1	 0
+0	 0	 1	 -1	 -1
+Turn 15: 1 moved from (3, 1) to (3, 2) after 0.6713244915008545s, the board became: 
+1	 0	 1	 1	 0
+1	 1	 0	 0	 1
+1	 1	 0	 -1	 -1
+1	 0	 1	 -1	 0
+0	 0	 1	 -1	 -1
+Turn 16: -1 moved from (2, 3) to (2, 2) after 0.367534875869751s, the board became: 
+1	 0	 1	 1	 0
+1	 1	 0	 0	 1
+1	 1	 -1	 0	 -1
+1	 0	 1	 -1	 0
+0	 0	 1	 -1	 -1
+Turn 17: 1 moved from (1, 1) to (1, 2) after 0.6476004123687744s, the board became: 
+1	 0	 1	 1	 0
+1	 0	 1	 0	 1
+1	 1	 -1	 0	 -1
+1	 0	 1	 -1	 0
+0	 0	 1	 -1	 -1
+Turn 18: -1 moved from (2, 2) to (1, 1) after 0.07972168922424316s, the board became: 
+1	 0	 -1	 1	 0
+-1	 -1	 -1	 0	 1
+-1	 1	 0	 0	 -1
+1	 0	 1	 -1	 0
+0	 0	 1	 -1	 -1
+Turn 19: 1 moved from (3, 2) to (2, 2) after 0.957542896270752s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 -1	 0	 1
+-1	 1	 1	 0	 -1
+1	 0	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 20: -1 moved from (1, 2) to (1, 3) after 0.7400176525115967s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+1	 0	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 21: 1 moved from (3, 0) to (3, 1) after 0.7733376026153564s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 22: -1 moved from (2, 4) to (2, 3) after 0.41385722160339355s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 23: 1 moved from (0, 3) to (0, 4) after 0.667994499206543s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 24: -1 moved from (2, 3) to (2, 4) after 0.33568382263183594s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 25: 1 moved from (0, 4) to (0, 3) after 0.5278341770172119s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 26: -1 moved from (2, 4) to (2, 3) after 0.40497779846191406s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 27: 1 moved from (0, 3) to (0, 4) after 0.6645195484161377s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 28: -1 moved from (2, 3) to (2, 4) after 0.376737117767334s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 29: 1 moved from (0, 4) to (0, 3) after 0.5359904766082764s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 30: -1 moved from (2, 4) to (2, 3) after 0.39412379264831543s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 31: 1 moved from (0, 3) to (0, 4) after 0.6699180603027344s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 32: -1 moved from (2, 3) to (2, 4) after 0.3560774326324463s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 33: 1 moved from (0, 4) to (0, 3) after 0.5599513053894043s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 34: -1 moved from (2, 4) to (2, 3) after 0.4044156074523926s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 35: 1 moved from (0, 3) to (0, 4) after 0.6952211856842041s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 -1	 0
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 36: -1 moved from (2, 3) to (2, 4) after 0.37932348251342773s, the board became: 
+1	 0	 -1	 0	 1
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 37: 1 moved from (0, 4) to (0, 3) after 0.6117889881134033s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 0
+0	 0	 1	 -1	 -1
+Turn 38: -1 moved from (4, 4) to (3, 4) after 0.42127513885498047s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 0	 1	 -1
+0	 0	 1	 -1	 0
+Turn 39: 1 moved from (3, 3) to (3, 2) after 0.49467015266418457s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 1	 0	 -1
+0	 0	 1	 -1	 0
+Turn 40: -1 moved from (3, 4) to (3, 3) after 0.47402024269104004s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 -1	 1
+-1	 1	 1	 0	 -1
+0	 1	 1	 -1	 0
+0	 0	 1	 -1	 0
+Turn 41: 1 moved from (2, 2) to (2, 3) after 0.27150726318359375s, the board became: 
+1	 0	 -1	 1	 0
+-1	 1	 0	 1	 1
+-1	 1	 0	 1	 -1
+0	 1	 1	 1	 0
+0	 0	 1	 -1	 0
+Turn 42: -1 moved from (0, 2) to (1, 2) after 0.3267548084259033s, the board became: 
+1	 0	 0	 1	 0
+-1	 -1	 -1	 -1	 1
+-1	 1	 0	 1	 -1
+0	 1	 1	 1	 0
+0	 0	 1	 -1	 0
+Turn 43: 1 moved from (3, 3) to (3, 4) after 0.5825634002685547s, the board became: 
+1	 0	 0	 1	 0
+-1	 -1	 -1	 -1	 1
+-1	 1	 0	 1	 -1
+0	 1	 1	 0	 1
+0	 0	 1	 -1	 0
+Turn 44: -1 moved from (1, 3) to (2, 2) after 0.6237959861755371s, the board became: 
+1	 0	 0	 1	 0
+-1	 -1	 -1	 0	 1
+-1	 -1	 -1	 -1	 -1
+0	 1	 1	 0	 1
+0	 0	 1	 -1	 0
+Turn 45: 1 moved from (4, 2) to (3, 3) after 0.8166921138763428s, the board became: 
+1	 0	 0	 1	 0
+-1	 -1	 -1	 0	 1
+-1	 -1	 -1	 1	 -1
+0	 1	 1	 1	 1
+0	 0	 0	 1	 0
+Turn 46: -1 moved from (1, 2) to (1, 3) after 0.23685312271118164s, the board became: 
+1	 0	 0	 -1	 0
+-1	 -1	 0	 -1	 1
+-1	 -1	 -1	 -1	 -1
+0	 1	 1	 1	 1
+0	 0	 0	 1	 0
+Turn 47: 1 moved from (3, 1) to (4, 0) after 0.3531382083892822s, the board became: 
+1	 0	 0	 -1	 0
+-1	 -1	 0	 -1	 1
+-1	 -1	 -1	 -1	 -1
+0	 0	 1	 1	 1
+1	 0	 0	 1	 0
+Turn 48: -1 moved from (2, 1) to (3, 1) after 0.32194995880126953s, the board became: 
+1	 0	 0	 -1	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+0	 -1	 1	 1	 1
+1	 0	 0	 1	 0
+Turn 49: 1 moved from (0, 0) to (0, 1) after 0.5887203216552734s, the board became: 
+0	 1	 0	 -1	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+0	 -1	 1	 1	 1
+1	 0	 0	 1	 0
+Turn 50: -1 moved from (0, 3) to (0, 2) after 0.43294763565063477s, the board became: 
+0	 1	 -1	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+0	 -1	 1	 1	 1
+1	 0	 0	 1	 0
+Turn 51: 1 moved from (0, 1) to (0, 0) after 0.5534782409667969s, the board became: 
+1	 0	 -1	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+0	 -1	 1	 1	 1
+1	 0	 0	 1	 0
+Turn 52: -1 moved from (0, 2) to (0, 1) after 0.4184880256652832s, the board became: 
+-1	 -1	 0	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+0	 -1	 1	 1	 1
+1	 0	 0	 1	 0
+Turn 53: 1 moved from (4, 0) to (3, 0) after 0.6400377750396729s, the board became: 
+-1	 -1	 0	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 0	 1	 0
+Turn 54: -1 moved from (0, 1) to (0, 2) after 0.4157881736755371s, the board became: 
+-1	 0	 -1	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 0	 1	 0
+Turn 55: 1 moved from (4, 3) to (4, 2) after 0.44446349143981934s, the board became: 
+-1	 0	 -1	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 1	 0	 0
+Turn 56: -1 moved from (0, 0) to (0, 1) after 0.3544180393218994s, the board became: 
+0	 -1	 -1	 0	 0
+-1	 -1	 0	 -1	 1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 1	 0	 0
+Turn 57: 1 moved from (1, 4) to (0, 4) after 0.4244089126586914s, the board became: 
+0	 -1	 -1	 0	 1
+-1	 -1	 0	 -1	 0
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 1	 0	 0
+Turn 58: -1 moved from (0, 2) to (0, 3) after 0.4742608070373535s, the board became: 
+0	 -1	 0	 -1	 1
+-1	 -1	 0	 -1	 0
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 1	 0	 0
+Turn 59: 1 moved from (3, 4) to (4, 4) after 0.6632301807403564s, the board became: 
+0	 -1	 0	 -1	 1
+-1	 -1	 0	 -1	 0
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 0
+0	 0	 1	 0	 1
+Turn 60: -1 moved from (2, 4) to (1, 4) after 0.718947172164917s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 -1	 0	 -1	 -1
+-1	 0	 -1	 -1	 0
+1	 -1	 1	 1	 0
+0	 0	 1	 0	 1
+Turn 61: 1 moved from (4, 4) to (3, 4) after 0.9442017078399658s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 -1	 0	 -1	 -1
+-1	 0	 -1	 -1	 0
+1	 -1	 1	 1	 1
+0	 0	 1	 0	 0
+Turn 62: -1 moved from (1, 3) to (2, 4) after 0.6648640632629395s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 -1	 0	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 0	 1	 0	 0
+Turn 63: 1 moved from (4, 2) to (4, 1) after 0.4771411418914795s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 -1	 0	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 1	 0	 0	 0
+Turn 64: -1 moved from (0, 3) to (0, 2) after 0.7732856273651123s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 -1	 0	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 1	 1	 1
+0	 1	 0	 0	 0
+Turn 65: 1 moved from (3, 2) to (4, 2) after 0.8245751857757568s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 -1	 0	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 66: -1 moved from (3, 1) to (2, 1) after 1.3410978317260742s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 -1	 0	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 67: 1 moved from (3, 3) to (4, 3) after 1.9062869548797607s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 -1	 0	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 68: -1 moved from (1, 1) to (1, 2) after 3.439323902130127s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 69: 1 moved from (4, 3) to (3, 3) after 2.717977523803711s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 70: -1 moved from (1, 0) to (0, 0) after 2.0324225425720215s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 71: 1 moved from (4, 2) to (4, 3) after 1.6745853424072266s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 72: -1 moved from (2, 1) to (3, 1) after 1.6431703567504883s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 73: 1 moved from (4, 3) to (4, 2) after 1.7426741123199463s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 74: -1 moved from (3, 1) to (2, 1) after 0.8323895931243896s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 75: 1 moved from (4, 2) to (4, 3) after 1.6855103969573975s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 76: -1 moved from (0, 0) to (1, 0) after 1.569758653640747s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 77: 1 moved from (4, 3) to (4, 2) after 1.90175199508667s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 78: -1 moved from (0, 2) to (0, 3) after 1.9566280841827393s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 79: 1 moved from (3, 3) to (4, 3) after 2.010312795639038s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 80: -1 moved from (0, 3) to (0, 2) after 2.9198665618896484s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 81: 1 moved from (4, 3) to (3, 3) after 1.967254877090454s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 82: -1 moved from (0, 2) to (0, 3) after 1.9783039093017578s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 83: 1 moved from (3, 3) to (4, 3) after 1.951350450515747s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 84: -1 moved from (0, 3) to (0, 2) after 2.6786811351776123s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 85: 1 moved from (4, 3) to (3, 3) after 2.0128204822540283s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 86: -1 moved from (0, 2) to (0, 3) after 1.8648309707641602s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 87: 1 moved from (3, 3) to (4, 3) after 1.9733047485351562s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 88: -1 moved from (0, 3) to (0, 2) after 2.7048487663269043s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 89: 1 moved from (4, 3) to (3, 3) after 2.7266347408294678s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 90: -1 moved from (1, 0) to (0, 0) after 1.8585474491119385s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 91: 1 moved from (3, 3) to (4, 3) after 1.7088439464569092s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 92: -1 moved from (0, 2) to (0, 3) after 2.303103446960449s, the board became: 
+-1	 -1	 0	 -1	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 93: 1 moved from (4, 1) to (3, 1) after 2.1713078022003174s, the board became: 
+-1	 -1	 0	 -1	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 94: -1 moved from (0, 0) to (1, 0) after 1.925541639328003s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 95: 1 moved from (3, 1) to (4, 1) after 2.7190709114074707s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 96: -1 moved from (1, 0) to (0, 0) after 3.033921957015991s, the board became: 
+-1	 -1	 0	 -1	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 97: 1 moved from (4, 3) to (3, 3) after 2.4589762687683105s, the board became: 
+-1	 -1	 0	 -1	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 98: -1 moved from (0, 3) to (0, 2) after 1.8506367206573486s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 99: 1 moved from (3, 3) to (4, 3) after 2.034541130065918s, the board became: 
+-1	 -1	 -1	 0	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 100: -1 moved from (0, 4) to (0, 3) after 2.4112870693206787s, the board became: 
+-1	 -1	 -1	 -1	 0
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 101: 1 moved from (4, 3) to (3, 3) after 1.9735949039459229s, the board became: 
+-1	 -1	 -1	 -1	 0
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 102: -1 moved from (1, 4) to (0, 4) after 1.834221601486206s, the board became: 
+-1	 -1	 -1	 -1	 -1
+0	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 103: 1 moved from (3, 3) to (4, 3) after 2.9525861740112305s, the board became: 
+-1	 -1	 -1	 -1	 -1
+0	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 104: -1 moved from (0, 4) to (1, 4) after 3.4243783950805664s, the board became: 
+-1	 -1	 -1	 -1	 0
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 105: 1 moved from (4, 1) to (3, 1) after 2.2611610889434814s, the board became: 
+-1	 -1	 -1	 -1	 0
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 106: -1 moved from (0, 0) to (1, 0) after 2.4277021884918213s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 107: 1 moved from (4, 2) to (4, 1) after 1.85874342918396s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 1	 0	 1	 0
+Turn 108: -1 moved from (1, 4) to (0, 4) after 2.3784918785095215s, the board became: 
+0	 -1	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 1	 0	 1	 0
+Turn 109: 1 moved from (4, 1) to (4, 2) after 1.612015962600708s, the board became: 
+0	 -1	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 110: -1 moved from (0, 4) to (1, 4) after 1.8735191822052002s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 111: 1 moved from (3, 1) to (4, 1) after 1.7029752731323242s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 112: -1 moved from (0, 3) to (0, 4) after 2.3822760581970215s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 113: 1 moved from (4, 1) to (3, 1) after 2.2177047729492188s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 114: -1 moved from (0, 4) to (0, 3) after 2.1869633197784424s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 1	 0	 0	 1
+0	 0	 1	 1	 0
+Turn 115: 1 moved from (3, 1) to (4, 1) after 2.240842342376709s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 116: -1 moved from (0, 1) to (0, 0) after 2.944272994995117s, the board became: 
+-1	 0	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 117: 1 moved from (4, 3) to (3, 3) after 2.9215915203094482s, the board became: 
+-1	 0	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 118: -1 moved from (0, 3) to (0, 4) after 2.294485092163086s, the board became: 
+-1	 0	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 119: 1 moved from (4, 2) to (4, 3) after 2.0784902572631836s, the board became: 
+-1	 0	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 120: -1 moved from (0, 4) to (0, 3) after 1.8751516342163086s, the board became: 
+-1	 0	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 121: 1 moved from (4, 3) to (4, 2) after 1.8102998733520508s, the board became: 
+-1	 0	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 122: -1 moved from (1, 4) to (0, 4) after 1.9687988758087158s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 123: 1 moved from (4, 2) to (4, 3) after 1.869581937789917s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 124: -1 moved from (0, 2) to (0, 1) after 1.9858036041259766s, the board became: 
+-1	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 125: 1 moved from (4, 3) to (4, 2) after 2.1473119258880615s, the board became: 
+-1	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 126: -1 moved from (0, 4) to (1, 4) after 2.11716365814209s, the board became: 
+-1	 -1	 0	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 127: 1 moved from (4, 2) to (4, 3) after 2.277421236038208s, the board became: 
+-1	 -1	 0	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 128: -1 moved from (1, 4) to (0, 4) after 2.142350912094116s, the board became: 
+-1	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 129: 1 moved from (4, 3) to (4, 2) after 2.7283029556274414s, the board became: 
+-1	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 130: -1 moved from (0, 1) to (0, 2) after 2.597743272781372s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 131: 1 moved from (4, 2) to (4, 3) after 2.537566661834717s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 132: -1 moved from (2, 1) to (3, 1) after 1.9953229427337646s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 133: 1 moved from (4, 3) to (4, 2) after 2.1001906394958496s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 134: -1 moved from (3, 1) to (2, 1) after 0.8998637199401855s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 135: 1 moved from (3, 4) to (4, 4) after 1.699798583984375s, the board became: 
+-1	 0	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 0
+0	 1	 1	 0	 1
+Turn 136: -1 moved from (0, 0) to (0, 1) after 2.3189117908477783s, the board became: 
+0	 -1	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 0
+0	 1	 1	 0	 1
+Turn 137: 1 moved from (4, 4) to (3, 4) after 2.2617762088775635s, the board became: 
+0	 -1	 -1	 -1	 -1
+-1	 0	 -1	 0	 0
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 138: -1 moved from (0, 4) to (1, 4) after 1.811995267868042s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 139: 1 moved from (4, 2) to (4, 3) after 1.877488374710083s, the board became: 
+0	 -1	 -1	 -1	 0
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 140: -1 moved from (0, 3) to (0, 4) after 1.7288000583648682s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 141: 1 moved from (4, 3) to (4, 2) after 1.8611469268798828s, the board became: 
+0	 -1	 -1	 0	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 142: -1 moved from (0, 2) to (0, 3) after 1.8831372261047363s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 143: 1 moved from (4, 2) to (4, 3) after 2.0206844806671143s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 144: -1 moved from (2, 1) to (3, 1) after 2.153200387954712s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 0	 1	 0
+Turn 145: 1 moved from (4, 3) to (4, 2) after 2.8456008434295654s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 0	 -1	 -1	 -1
+1	 -1	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 146: -1 moved from (3, 1) to (2, 1) after 0.9238276481628418s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 1	 1
+0	 1	 1	 0	 0
+Turn 147: 1 moved from (3, 3) to (4, 3) after 2.423001289367676s, the board became: 
+0	 -1	 0	 -1	 -1
+-1	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
+Turn 148: -1 moved from (1, 0) to (0, 0) after 3.6100380420684814s, the board became: 
+-1	 -1	 0	 -1	 -1
+0	 0	 -1	 0	 -1
+-1	 -1	 -1	 -1	 -1
+1	 0	 0	 0	 1
+0	 1	 1	 1	 0
