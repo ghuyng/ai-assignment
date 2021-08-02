@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir data
+mkdir -p data
 
 for i in {$1..$2}; do
 	out=data/round${i}.txt
