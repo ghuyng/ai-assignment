@@ -391,17 +391,18 @@ def minimax_alg(prev_board, board, player, initial_height):
 
 
 def ab_rate_board(
-    prev_board, board, played_player, original_player, height, al=-inf, be=inf
+    prev_board, board, previous_player, original_player, height, al=-inf, be=inf
 ) -> float:
-    next_moves = get_all_legal_moves(prev_board, board, -played_player)
+    is_maximizing_player = -previous_player == original_player
+    next_moves = get_all_legal_moves(prev_board, board, -previous_player)
     if height == 0 or len(next_moves) == 0:
-        return rate_board(board, played_player)
-    if -played_player == original_player:
+        return rate_board(board, original_player)
+    if is_maximizing_player:
         value = -inf
         for (src, des) in next_moves:
             new_board = board_after_move_and_capturing(src, des, board)
             new_val = ab_rate_board(
-                board, new_board, -played_player, original_player, height - 1, al, be
+                board, new_board, -previous_player, original_player, height - 1, al, be
             )
             value = max(value, new_val)
             al = max(al, value)
@@ -412,7 +413,7 @@ def ab_rate_board(
         for (src, des) in next_moves:
             new_board = board_after_move_and_capturing(src, des, board)
             new_val = ab_rate_board(
-                board, new_board, -played_player, original_player, height - 1, al, be
+                board, new_board, -previous_player, original_player, height - 1, al, be
             )
             value = min(value, new_val)
             be = min(be, value)
@@ -424,6 +425,7 @@ def ab_rate_board(
 def ab_pruning_alg(prev_board, board, player, initial_height):
     moves = get_all_legal_moves(prev_board, board, player)
     if len(moves) > 0:
+        # Construct a dictionary of move : rated score
         scores = {
             (src, des): ab_rate_board(
                 board,
@@ -613,7 +615,7 @@ def choose_move_alg0(prev_board, board, player):
 
 def choose_move_alg1(prev_board, board, player):
     # return minimax_alg(prev_board, board, player, initial_height=1)
-    return ab_pruning_alg(prev_board, board, player, initial_height=2)
+    return ab_pruning_alg(prev_board, board, player, initial_height=3)
     # return choose_move_alg0(prev_board, board, player)
 
 
