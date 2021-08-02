@@ -29,6 +29,18 @@ python -m cProfile -s tottime -m main
 
 ```
 
+# Generate dataset
+
+Results are produced in ./data
+
+Run `gen.sh` with the range of your choice
+ie.:
+
+```bash
+# Generate case number 1000 to 2000:
+bash gen.sh 1000 2000
+```
+
 # References
 
 ## Monte-Carlo tree search (implemented by Phat)

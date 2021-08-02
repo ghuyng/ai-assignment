@@ -603,6 +603,7 @@ def simulate():
             f"Turn {turn}: {player} moved from {src} to {des} after {time_after - time_before}s, the board became: {board_to_string(board)}"
         )
         player = -player
+    print(f"Player {get_winner(board)} won.")
 
 
 # * EDIT THIS!
@@ -610,12 +611,14 @@ def simulate():
 
 def choose_move_alg0(prev_board, board, player):
     # return minimax_alg(prev_board, board, player, initial_height=1)
-    return _greedy_alg(prev_board, board, player)
+    # return _greedy_alg(prev_board, board, player)
+    return ab_pruning_alg(prev_board, board, player, initial_height=3)
 
 
 def choose_move_alg1(prev_board, board, player):
     # return minimax_alg(prev_board, board, player, initial_height=1)
     return ab_pruning_alg(prev_board, board, player, initial_height=3)
+    # return UCT(player=player, rootstate=board, iter=512, prev_board=prev_board)
     # return choose_move_alg0(prev_board, board, player)
 
 
