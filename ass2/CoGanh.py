@@ -338,10 +338,21 @@ def get_all_legal_moves(
 
 
 def rate_board(board, player):
-    """Return the difference of PLAYER and OPPONENT's number chess pieces on BOARD."""
-    num_player = sum(1 for i in range(5) for j in range(5) if board[i][j] == player)
-    num_opponent = sum(1 for i in range(5) for j in range(5) if board[i][j] == -player)
-    return num_player - num_opponent
+    """Return the difference of PLAYER and OPPONENT's number possible moves on
+    BOARD, approximately."""
+    approx_player_moves = sum(
+        len(_get_empty_neighbors((i, j), board))
+        for i in range(5)
+        for j in range(5)
+        if board[i][j] == player
+    )
+    approx_opponent_moves = sum(
+        len(_get_empty_neighbors((i, j), board))
+        for i in range(5)
+        for j in range(5)
+        if board[i][j] == -player
+    )
+    return approx_player_moves - approx_opponent_moves
 
 
 def minimax_rate_move(src, des, board, player, height):
