@@ -18,14 +18,9 @@
 
 # Implement & Test
 
-In `CoGanh.py`: Replace `choose_move_alg1`'s body with your algorithm (optionally `choose_move_alg0`, too).
-
 ```bash
 
-python -m main
-
-# With profiler to find out the bottle neck
-python -m cProfile -s tottime -m main
+python coganh_deep-qlearning.py
 
 ```
 
