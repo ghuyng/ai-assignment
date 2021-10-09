@@ -20,11 +20,16 @@
 
 ```bash
 
+# Using Deep Q-learning
 python coganh_deep-qlearning.py
 
 ```
 
 # References
+
+## Deep Q-learning
+
+-   [ Keras plays catch - a single file Reinforcement Learning example ](https://gist.github.com/EderSantana/c7222daa328f0e885093?fbclid=IwAR2r68n2y78gajMC4AN1qCjzUGrNVqgAD8mWJmiOD7xcvK6wqzdLQ7vIeoE)
 
 ## Monte-Carlo tree search (implemented by Phat)
 
